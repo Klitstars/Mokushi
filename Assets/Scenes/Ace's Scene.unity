@@ -204,3 +204,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1911578203
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1911578204}
+  - component: {fileID: 1911578205}
+  m_Layer: 0
+  m_Name: DeckController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1911578204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911578203}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1911578205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911578203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60e44ec2e6f76db4d8baf88339e39c54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  utilityDeck:
+    cardDeck:
+    - {fileID: 11400000, guid: 9d08d9f6d2fb53f4abe8011d1010a1a4, type: 2}
+    - {fileID: 11400000, guid: 56b4fb8bffc88e44e81b4fb76a2f49c8, type: 2}
+    - {fileID: 11400000, guid: 18b74d1a5d9aeff46a465b966ba7504e, type: 2}
+    deckType: 0
+  eventDeck:
+    cardDeck:
+    - {fileID: 11400000, guid: 0757537489f765441a930abe5073bafe, type: 2}
+    - {fileID: 11400000, guid: f722d12b66f6e944b9b2c715dcfc042d, type: 2}
+    - {fileID: 11400000, guid: 7bc840a6cf1dad6448fde64930c060fa, type: 2}
+    deckType: 1
+  deckToTest: 1
+  numberToDraw: 1
