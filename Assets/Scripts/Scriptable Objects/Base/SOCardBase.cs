@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class SOCardBase : ScriptableObject
 {
+    [Header("Card Base")]
     [SerializeField] private string cardName;
     [SerializeField] private string cardDescription;
-    private Sprite cardImage;
-    private Sprite cardBackground;
-    private CardType cardType;
-}
-
-public enum CardType
-{
-    Utility,
-    Event
+    [SerializeField] private Sprite cardImage;
+    [SerializeField] private Sprite cardBackground;
+    [SerializeField] private CardType cardType;
 }

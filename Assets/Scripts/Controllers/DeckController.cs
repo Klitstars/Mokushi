@@ -4,47 +4,42 @@ using UnityEngine;
 
 public class DeckController : MonoBehaviour
 {
-    [SerializeField] private DeckObject utilityDeck;
-    [SerializeField] private DeckObject eventDeck;
+    [SerializeField] private DeckObject deck;
 
-#if(UNITY_EDITOR)
-    [Header("Debug")]
-    [SerializeField] private CardType deckToTest;
-    [SerializeField] private int numberToDraw;
-    public void GetRandomCardTest()
-    {
-        GetRandomCard(deckToTest, 1);
-    }
-#endif
-
-    [ContextMenu("DrawCards")]
-    public SOCardBase GetRandomCard(CardType deckType, int cardsToDraw = 1)
+    public IEnumerable<SOCardBase> DrawRandomCard(int cardsToDraw = 1)
     {
         List<SOCardBase> drawnCards = new List<SOCardBase>();
 
         for (int i = 0; i < cardsToDraw; i++)
         {
-            int randomInt = Random.Range(0, GetCorrectDeck(deckType).CardDeck.Count);
-            drawnCards.Add(GetCorrectDeck(deckType).CardDeck[randomInt]);
+            SOCardBase drawnCard = deck.CardDeck[0];
+            
+            drawnCards.Add(drawnCard);
+            
+            //WE NEED TO ADD A DISCARD DECK HERE
+
+            deck.RemoveCard(drawnCard);
         }
 
         AnnounceDrawEditor(drawnCards);
-        return null;
+        return drawnCards;
     }
 
-    private void Update()
+    public void RandomizeCardDeck()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            GetRandomCardTest();
+        List<SOCardBase> newDeckOrder = new List<SOCardBase>();
+        int deckCount = deck.CardDeck.Count;
+
+        for(int i = 0; i < deckCount; i++)
+        {
+            int randomInt = Random.Range(0, deck.CardDeck.Count);
+            newDeckOrder.Add(deck.CardDeck[randomInt]);
+        }
+
+        deck.CardDeck = newDeckOrder;
     }
 
-    private DeckObject GetCorrectDeck(CardType deckType)
-    {
-        if (deckType == CardType.Event)
-            return eventDeck;
-        else
-            return utilityDeck;
-    }
+    public void AddCard(SOCardBase cardToAdd) => deck.AddCard(cardToAdd);
 
     private void AnnounceDrawEditor(IEnumerable<SOCardBase> cards)
     {
