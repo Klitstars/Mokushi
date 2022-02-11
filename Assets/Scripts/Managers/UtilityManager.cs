@@ -35,7 +35,7 @@ public class UtilityManager : MonoBehaviour
     {
         if (currentEquipment != null)
         {
-            GameManager.instance.HandManagerInstance.AddCardToHand(currentEquipment);
+            GameManager.instance.HandManagerInstance.AddCardToHand((IEnumerable<SOCardBase>)currentEquipment);
             RemoveEquipment();
 
             currentEquipment = null;

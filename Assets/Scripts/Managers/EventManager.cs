@@ -41,16 +41,19 @@ public class EventManager : MonoBehaviour
     public void DiscardEventCards(int cardsToDiscard)
     {
         //Do we need some kind of animation here for the event card cycling?
+        List<SOCardBase> clueCards = new List<SOCardBase>();
 
         for(int i = 0; i < cardsToDiscard; i++)
         {
             SOEventCard card = DrawEventCard();
 
-            if (card.EventType == EventCardType.Clue)
-                GameManager.instance.HandManagerInstance.AddCardToHand(card);
-            else               
+            if (card.EventType != EventCardType.Clue)
                 deckController.AddCard(card);
+            else
+                clueCards.Add(card);
         }
+
+        GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
     }
 
     public void InfectedEvent()
