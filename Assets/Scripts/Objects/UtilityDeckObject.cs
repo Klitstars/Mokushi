@@ -20,4 +20,5 @@ public class UtilityDeckObject
     }
 
     public void AddCard(SOUtilityCard card) => cardDeck.Add(card);
+    public void AddCardToTop(SOUtilityCard card) => cardDeck.Insert(0, card);
 }

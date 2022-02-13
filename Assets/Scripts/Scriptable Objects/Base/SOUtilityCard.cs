@@ -25,7 +25,11 @@ public class SOUtilityCard : SOCardBase
             return;
         }
 
-        IterateThroughEffects();
+        else
+        {
+            IterateThroughEffects();
+            GameManager.OnStartNewTurn += IterateThroughEffectCancellations;
+        }
     }
 
     protected void IterateThroughEffects()
@@ -38,6 +42,8 @@ public class SOUtilityCard : SOCardBase
     {
         foreach (SOUtilityEffect effect in utilityEffects)
             effect.CancelEffects();
+
+        GameManager.OnStartNewTurn -= IterateThroughEffectCancellations;
     }
 
     public void OnEquipEffect()

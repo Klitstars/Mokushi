@@ -51,7 +51,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.DangerPointModifier:
-                DangerPointModifier(effectMagnitude, effectTarget);
+                DangerPointModifier(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.PlayCountModifier:
@@ -97,7 +97,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.DangerPointModifier:
-                DangerPointModifier(-effectMagnitude, effectTarget);
+                DangerPointModifier(-effectMagnitude);
                 return;
 
             case UtilityEffectTypes.PlayCountModifier:

@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
   m_Name: Attribute Devoted
   m_EditorClassIdentifier: 
-  cardName: 'Attribute: Precision'
+  cardName: 'Attribute: Devoted'
   cardDescription: 
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
   utilityType: 3
   utilityPoints: 3
-  utilityEffects:
-  - {fileID: 0}
+  utilityEffects: []

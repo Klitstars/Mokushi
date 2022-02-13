@@ -20,4 +20,6 @@ public class EventDeckObject
     }
 
     public void AddCard(SOEventCard card) => cardDeck.Add(card);
+
+    public void AddCardToTop(SOEventCard card) => cardDeck.Insert(0, card);
 }
