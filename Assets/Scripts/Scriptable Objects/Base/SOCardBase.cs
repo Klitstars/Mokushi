@@ -9,7 +9,7 @@ public class SOCardBase : ScriptableObject
     [SerializeField] private string cardDescription;
     [SerializeField] private Sprite cardForeground;
     [SerializeField] private Sprite cardBackground;
-    [SerializeField] private CardType cardType;
+    [SerializeField] protected CardType cardType;
     private GameObject cardUIObject;
 
     public string CardName { get => cardName; }

@@ -16,16 +16,38 @@ public class HandManager : MonoBehaviour
         return discardedCardCount;
     }
 
-    public void AddCardToHand(IEnumerable<SOUtilityCard> cards)
+    public void AddCardsToHand(IEnumerable<SOUtilityCard> cards)
     {
         foreach(SOUtilityCard card in cards)
         {
-            if (card == null)
-                return;
-
-            hand.Add(card);
-            GameManager.instance.CardBuilder.GenerateCard(card);
+            AddCardToHand(card);
         }
+    }
+
+    public void AddCardToHand(SOUtilityCard card)
+    {
+        if (card == null)
+            return;
+
+        hand.Add(card);
+        GameManager.instance.CardBuilder.GenerateCard(card);
+    }
+
+    public void RemoveCardFromHand(IEnumerable<SOUtilityCard> cards)
+    {
+        foreach (SOUtilityCard card in cards)
+        {
+            RemoveCardFromHand(card);
+        }
+    }
+
+    public void RemoveCardFromHand(SOUtilityCard card)
+    {
+        if (card == null)
+            return;
+
+        Destroy(card.CardUIOjbect);
+        hand.Remove(card);
     }
 
     private void Start()

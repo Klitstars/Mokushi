@@ -11,10 +11,14 @@ public class UtilityManager : MonoBehaviour
     public delegate void onUnequipItem();
     public static event onEquipItem OnUnequipItem;
 
-    public void DrawCard(int cardsToDraw = 1)
+    public void DrawCard()
     {
-        IEnumerable<SOUtilityCard> drawnCards = GameManager.instance.DeckManager.DrawRandomUtilityCard(cardsToDraw);
-        GameManager.instance.HandManager.AddCardToHand(drawnCards);
+        GameManager.instance.HandManager.AddCardToHand(GameManager.instance.DeckManager.DrawRandomUtilityCard());
+    }
+    public void DrawCards(int cardsToDraw = 1)
+    {
+        IEnumerable<SOUtilityCard> drawnCards = GameManager.instance.DeckManager.DrawRandomUtilityCards(cardsToDraw);
+        GameManager.instance.HandManager.AddCardsToHand(drawnCards);
     }
 
     public void PlayUtilityCard(SOUtilityCard newUtility, SOEventCard currentEventTarget)
@@ -22,22 +26,20 @@ public class UtilityManager : MonoBehaviour
         if (newUtility.UtilityType == Utility.Equipment)
         {
             Equip(newUtility);
+            //NEED UI HERE TO SHOW ACTIVE GAME OBJECT
             return;
         }
-        
-        if (!GameManager.instance.EventManager.CurrentEventCards.Contains(currentEventTarget))
-            return;
 
-        Debug.Log("Attempting to play utility card.");
-        if(GameManager.instance.EventManager.UpdateEventDangerPoints(newUtility, currentEventTarget))
-            newUtility.PlayUtilityCard();
+        newUtility.PlayUtilityCard();
+        GameManager.instance.HandManager.RemoveCardFromHand(newUtility);
+        GameManager.instance.DeckManager.AddCard(newUtility);
     }
 
     public void Unequip()
     {
         if (currentEquipment != null)
         {
-            GameManager.instance.HandManager.AddCardToHand((IEnumerable<SOUtilityCard>)currentEquipment);
+            GameManager.instance.HandManager.AddCardsToHand((IEnumerable<SOUtilityCard>)currentEquipment);
             RemoveEquipment();
 
             currentEquipment = null;

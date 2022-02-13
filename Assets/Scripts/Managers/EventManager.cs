@@ -12,25 +12,17 @@ public class EventManager : MonoBehaviour
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
     
-
-    //public delegate void onEventAdded();
-    //public static event onEventAdded OnEventAdded;
-    //public delegate void onEventSolved();
-    //public static event onEventSolved OnEventSolved;
-
-
     public void DrawAndUpdateEvents(int eventsToDraw)
     {
         for(int i = 0; i < eventsToDraw; i++)
         {
-            List<SOEventCard> newCards = new List<SOEventCard>((List<SOEventCard>)GameManager.instance.DeckManager.DrawRandomEventCard());
+            List<SOEventCard> newCards = new List<SOEventCard>((List<SOEventCard>)GameManager.instance.DeckManager.DrawRandomEventCards());
 
             if (newCards.Count == 0)
                 return;
 
             foreach(SOEventCard card in newCards)
             {
-                //OnEventAdded.Invoke();
                 currentEventCards.Add(card);
                 GameManager.instance.CardBuilder.GenerateCard(card);
                 card.OnEventStarted();
@@ -40,31 +32,30 @@ public class EventManager : MonoBehaviour
         //Need UI Update here.
     }
 
+    public void DrawAndUpdateEvents()
+    {
+        SOEventCard newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
+        GameManager.instance.CardBuilder.GenerateCard(newEvent);
+
+        currentEventCards.Add(newEvent);
+        newEvent.OnEventStarted();
+
+        //Need UI Update here.
+    }
+
     public bool UpdateEventDangerPoints(SOUtilityCard utility, SOEventCard targetEvent)
     {
-        if (!currentEventCards.Contains(targetEvent))
-        {
-            Debug.Log("Failed to update Event Card because it is not a current event.");
+        if (!CheckEventIsPlayable(targetEvent))
             return false;
-        }
-
-        if (targetEvent.CurrentPlayNumber >= targetEvent.MaxPlayNumber + eventPlayCountModifier)
-        {
-            Debug.Log("Failed to update Event Card because the Max Play Number is: " + (targetEvent.MaxPlayNumber + eventPlayCountModifier) 
-                + " and the Current Play Number is: " +  targetEvent.CurrentPlayNumber);
-            return false;
-        }
 
         //Need UI Update here.
 
-        Debug.Log("Attempting to update Event Card");
         targetEvent.UpdateDangerPoints(utility.UtilityPoints);
 
-        if (targetEvent.CurrentDangerPoints >= targetEvent.MaxDangerPoints + eventDangerModifier)
+        if (targetEvent.CurrentDangerPoints + eventDangerModifier <= 0)
             RemoveEvent(targetEvent);
 
         UpdatePlayCount(targetEvent);
-        Debug.Log(targetEvent.CurrentDangerPoints);
         return true;
     }
 
@@ -91,8 +82,12 @@ public class EventManager : MonoBehaviour
     public void EndTurnCheck(bool nullifyDamage)
     {
         foreach (SOEventCard eventCard in currentEventCards)
+        {
             if (!nullifyDamage)
-                GameManager.instance.UpdatePlayerHealth(eventCard.CurrentDangerPoints + eventDangerModifier);
+                GameManager.instance.UpdatePlayerHealth(-eventCard.CurrentDangerPoints + eventDangerModifier);
+
+            RemoveEvent(eventCard);
+        }
     }
 
     private void Start()
@@ -102,7 +97,7 @@ public class EventManager : MonoBehaviour
 
     private IEnumerable<SOEventCard> DrawEventCard()
     {
-        return GameManager.instance.DeckManager.DrawRandomEventCard(1);
+        return GameManager.instance.DeckManager.DrawRandomEventCards(1);
     }
 
     private void RemoveEvent(SOEventCard eventToRemove)
@@ -110,12 +105,28 @@ public class EventManager : MonoBehaviour
         eventToRemove.OnEventEnded();
         Destroy(eventToRemove.CardUIOjbect);
         currentEventCards.Remove(eventToRemove);
-
-        //OnEventSolved.Invoke();
     }
 
     private void UpdatePlayCount(SOEventCard card)
     {
         card.UpdatePlayCount(1);
+    }
+
+    private bool CheckEventIsPlayable(SOEventCard targetEvent)
+    {
+        if (!currentEventCards.Contains(targetEvent))
+        {
+            Debug.Log("Failed to update Event Card because it is not a current event.");
+            return false;
+        }
+
+        if (targetEvent.CurrentPlayNumber >= targetEvent.MaxPlayNumber + eventPlayCountModifier)
+        {
+            Debug.Log("Failed to update Event Card because the Max Play Number is: " + (targetEvent.MaxPlayNumber + eventPlayCountModifier)
+                + " and the Current Play Number is: " + targetEvent.CurrentPlayNumber);
+            return false;
+        }
+
+        return true;
     }
 }

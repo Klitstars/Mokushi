@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
@@ -40,29 +40,34 @@ public class GameManager : MonoBehaviour
     {
         if (!nullifyDamage)
             currentHealth += amountToModify;
+
+        Debug.Log("Current player health is: " + currentHealth);
     }
 
     [ContextMenu("StartGame")]
     public void StartGame()
     {
-        utilityManager.DrawCard(7);
+        utilityManager.DrawCards(7);
         eventManager.DrawAndUpdateEvents(1);
+
+        OnStartNewTurn += UtilityManager.DrawCard;
+        OnStartNewTurn += EventManager.DrawAndUpdateEvents;
+    }
+
+    public void StartNewGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void EndTurn()
     {
         if (!keepCurrentEvent)
-        {
-            if(SurvivedEvent())
-                eventManager.DrawAndUpdateEvents(1);
-            else
+            if(!SurvivedEvent())
             {
                 LoseGame();
                 return;
             }
-        }
 
-        utilityManager.DrawCard();
         OnStartNewTurn.Invoke();
     }
 
@@ -99,9 +104,13 @@ public class GameManager : MonoBehaviour
     {
         eventManager.EndTurnCheck(nullifyDamage);
 
-        if (maxHealth <= 0)
+        if (currentHealth <= 0)
+        {
+            Debug.Log("Did not survive the event");
             return false;
+        }
 
+        Debug.Log("Survived the event");
         return true;
     }
 

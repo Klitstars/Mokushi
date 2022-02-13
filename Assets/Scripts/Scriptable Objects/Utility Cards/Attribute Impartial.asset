@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
+  m_Name: Attribute Impartial
+  m_EditorClassIdentifier: 
+  cardName: 'Attribute: Impartial'
+  cardDescription: Draw a Utility Card then draw an Event Card.
+  cardForeground: {fileID: 0}
+  cardBackground: {fileID: 0}
+  cardType: 0
+  utilityType: 3
+  utilityPoints: 3
+  utilityEffects:
+  - {fileID: 11400000, guid: eac3287a73c983a4a88585c05ab28297, type: 2}
+  - {fileID: 11400000, guid: f6382f7e8f429e44fbe6a842774346f7, type: 2}

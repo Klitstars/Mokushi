@@ -15,7 +15,7 @@ public class CardObject : MonoBehaviour
 
     private SOUtilityCard utilityCardData;
     private SOEventCard eventCardData;
-    private bool isPickedUp = false;
+    public bool isPickedUp = false;
 
     public SOUtilityCard UtilityCardData { get => utilityCardData; }
     public SOEventCard EventCardData { get => eventCardData; }
@@ -61,25 +61,6 @@ public class CardObject : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-
-        //    if (hit.collider != null)
-        //    {
-        //        Debug.Log("Target Position: " + hit.collider.gameObject.transform.position);
-        //        CardObject targetCard = hit.collider.GetComponent<CardObject>();
-        //        targetCard.GetComponentInParent<Transform>().DetachChildren();
-        //        targetCard.isPickedUp = !targetCard.isPickedUp;
-        //    }
-        //}
-
-        //ReturnHome();
-    }
-
-    private void ReturnHome()
-    {
-        if (transform.position != homePoint.position && !isPickedUp)
-            transform.position = Vector3.Lerp(transform.position, new Vector3(homePoint.position.x, homePoint.position.y, transform.position.z), lerpSpeed * Time.deltaTime);
+        
     }
 }

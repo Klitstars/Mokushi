@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
+  m_Name: Ninjutsu Waterveil
+  m_EditorClassIdentifier: 
+  cardName: 'Ninjutsu: Waterveil'
+  cardDescription: Draw 2 Utility Cards.
+  cardForeground: {fileID: 0}
+  cardBackground: {fileID: 0}
+  cardType: 0
+  utilityType: 2
+  utilityPoints: 0
+  utilityEffects:
+  - {fileID: 11400000, guid: 0e0b81f42f24b56418d9fe8c6e77a656, type: 2}
