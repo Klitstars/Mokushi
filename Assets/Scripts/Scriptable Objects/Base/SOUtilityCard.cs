@@ -5,22 +5,51 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewUtilityCard", menuName = "Cards/NewUtilityCard", order = 2)]
 public class SOUtilityCard : SOCardBase
 {
-    [Header("CardBaseAttributes")]
-    [SerializeField] private string cardName;
-    [SerializeField] private string cardDescription;
-    [SerializeField] private Sprite cardImage;
-    [SerializeField] private Sprite cardBackground;
-    [SerializeField] private Utility utilityType;
-    [SerializeField] private Equipment equipmentType;
+    [Header("Utility Attributes")]
+    [SerializeField] protected Utility utilityType;
+    [SerializeField] protected int utilityPoints;
 
-    [Header("CardEffects")]
-    [SerializeField] private SOUtilityEffect utilityEffect;
-    [SerializeField] private SOOnEquipEffect onEquipEffect;
-    [SerializeField] private SOOnUnEquipEffect onUnequipEffect;
+    [Header("Card Effects")]
+    [SerializeField] protected List<SOUtilityEffect> utilityEffects;
 
-    public Equipment EquipmentType { get => equipmentType; }
     public Utility UtilityType { get => utilityType; }
-    public SOUtilityEffect UtilityEffect { get => utilityEffect; }
-    public SOOnEquipEffect OnEquipEffect { get => onEquipEffect; }
-    public SOOnUnEquipEffect OnUnequipEffect { get => onUnequipEffect; }
+    public int UtilityPoints { get => utilityPoints; }
+    public List<SOUtilityEffect> UtilityEffects { get => utilityEffects; }
+
+    public void PlayUtilityCard()
+    { 
+        if(utilityType == Utility.Equipment)
+        {
+            UtilityManager.OnEquipItem += OnEquipEffect;
+            UtilityManager.OnUnequipItem += OnUnequipEffect;
+            return;
+        }
+
+        IterateThroughEffects();
+    }
+
+    protected void IterateThroughEffects()
+    {
+        foreach (SOUtilityEffect effect in utilityEffects)
+            effect.InitiateEffect();
+    }
+
+    protected void IterateThroughEffectCancellations()
+    {
+        foreach (SOUtilityEffect effect in utilityEffects)
+            effect.CancelEffects();
+    }
+
+    public void OnEquipEffect()
+    {
+        IterateThroughEffects();
+    }
+
+    public void OnUnequipEffect()
+    {
+        IterateThroughEffectCancellations();
+
+        UtilityManager.OnEquipItem -= OnEquipEffect;
+        UtilityManager.OnUnequipItem -= OnUnequipEffect;
+    }
 }

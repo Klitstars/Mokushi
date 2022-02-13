@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HandManager : MonoBehaviour
 {
-    private List<SOCardBase> hand;
-    private DeckController deckController;
+    private List<SOUtilityCard> hand;
+
 
     public int DiscardHand()
     {
@@ -16,9 +16,20 @@ public class HandManager : MonoBehaviour
         return discardedCardCount;
     }
 
-    public void AddCardToHand(IEnumerable<SOCardBase> cards)
+    public void AddCardToHand(IEnumerable<SOUtilityCard> cards)
     {
-        foreach(SOCardBase card in cards)
+        foreach(SOUtilityCard card in cards)
+        {
+            if (card == null)
+                return;
+
             hand.Add(card);
+            GameManager.instance.CardBuilder.GenerateCard(card);
+        }
+    }
+
+    private void Start()
+    {
+        hand = new List<SOUtilityCard>();
     }
 }

@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class SOCardBase : ScriptableObject
 {
-    [Header("Card Base")]
+    [Header("Card Base Attributes")]
     [SerializeField] private string cardName;
     [SerializeField] private string cardDescription;
-    [SerializeField] private Sprite cardImage;
+    [SerializeField] private Sprite cardForeground;
     [SerializeField] private Sprite cardBackground;
     [SerializeField] private CardType cardType;
+    private GameObject cardUIObject;
+
+    public string CardName { get => cardName; }
+    public string CardDescription { get => cardDescription; }
+    public Sprite CardForeground { get => cardForeground; }
+    public Sprite CardBackground { get => cardBackground; }
+    public CardType CardType { get => cardType; }
+    public GameObject CardUIOjbect { get => cardUIObject; set => cardUIObject = value; }
+
 }

@@ -14,5 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: B
   cardDescription: 
-  cardName: 
-  cardDescription: 
+  cardForeground: {fileID: 0}
+  cardBackground: {fileID: 0}
+  cardType: 0
+  maxDangerPoints: 4
+  maxPlayNumber: 2
+  eventType: 0
+  eventEffect: {fileID: 0}

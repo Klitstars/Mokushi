@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class SOEventEffectBase : ScriptableObject
 {
-    public virtual void DoEvent()
+    public void OnEventStarted()
     {
-        return;
+
+    }
+
+    public void OnEventEnded()
+    {
+
     }
 }

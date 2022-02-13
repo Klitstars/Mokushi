@@ -4,38 +4,68 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    private SOEventCard currentEvent;
-    private int currentEventDanger;
-    private int currentEventPlayCount;
-    private int eventDangerModifier;
-    private int eventPlayCountModifier;
+    [SerializeField] private List<SOEventCard> currentEventCards;
+    [SerializeField] private int eventDangerModifier = 0;
+    [SerializeField] private int eventPlayCountModifier = 0;
 
-    private DeckController deckController;
-
-    public SOEventCard CurrentEventCard { get => currentEvent; set => currentEvent = value; }
-    public int CurrentEventDanger { get => currentEventDanger; }
-    public int CurrentEventPlayCount { get => currentEventPlayCount; }
-    public int EventDangerModifier { get => EventDangerModifier; }
-    public int EventPlayCountModifier { get => eventPlayCountModifier; }
-    public void UpdateCurrentEventDanger(int dangerPointsToChange) => currentEventDanger += dangerPointsToChange;
-    public void UpdateCurrentPlayCount(int playCountPointsToChange) => currentEventPlayCount += playCountPointsToChange;
+    public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
+    
+
+    //public delegate void onEventAdded();
+    //public static event onEventAdded OnEventAdded;
+    //public delegate void onEventSolved();
+    //public static event onEventSolved OnEventSolved;
 
 
-    public delegate void onEventChanged();
-    public static event onEventChanged OnEventChanged;
-
-    public void DrawAndUpdateEvent() => currentEvent = (SOEventCard)deckController.DrawRandomCard();
-
-    public void ScavengerEvent()
+    public void DrawAndUpdateEvents(int eventsToDraw)
     {
-        //Can destroy current equipment to reduce the danger points to 0.
+        for(int i = 0; i < eventsToDraw; i++)
+        {
+            List<SOEventCard> newCards = new List<SOEventCard>((List<SOEventCard>)GameManager.instance.DeckManager.DrawRandomEventCard());
+
+            if (newCards.Count == 0)
+                return;
+
+            foreach(SOEventCard card in newCards)
+            {
+                //OnEventAdded.Invoke();
+                currentEventCards.Add(card);
+                GameManager.instance.CardBuilder.GenerateCard(card);
+                card.OnEventStarted();
+            }            
+        }
+
+        //Need UI Update here.
     }
 
-    public void RogueNinjaEvent()
+    public bool UpdateEventDangerPoints(SOUtilityCard utility, SOEventCard targetEvent)
     {
-        //If you have a katana, destroy it after this event.
+        if (!currentEventCards.Contains(targetEvent))
+        {
+            Debug.Log("Failed to update Event Card because it is not a current event.");
+            return false;
+        }
+
+        if (targetEvent.CurrentPlayNumber >= targetEvent.MaxPlayNumber + eventPlayCountModifier)
+        {
+            Debug.Log("Failed to update Event Card because the Max Play Number is: " + (targetEvent.MaxPlayNumber + eventPlayCountModifier) 
+                + " and the Current Play Number is: " +  targetEvent.CurrentPlayNumber);
+            return false;
+        }
+
+        //Need UI Update here.
+
+        Debug.Log("Attempting to update Event Card");
+        targetEvent.UpdateDangerPoints(utility.UtilityPoints);
+
+        if (targetEvent.CurrentDangerPoints >= targetEvent.MaxDangerPoints + eventDangerModifier)
+            RemoveEvent(targetEvent);
+
+        UpdatePlayCount(targetEvent);
+        Debug.Log(targetEvent.CurrentDangerPoints);
+        return true;
     }
 
     public void DiscardEventCards(int cardsToDiscard)
@@ -45,40 +75,47 @@ public class EventManager : MonoBehaviour
 
         for(int i = 0; i < cardsToDiscard; i++)
         {
-            SOEventCard card = DrawEventCard();
+            IEnumerable<SOEventCard> eventCards = DrawEventCard();
 
-            if (card.EventType != EventCardType.Clue)
-                deckController.AddCard(card);
-            else
-                clueCards.Add(card);
+            foreach(SOEventCard card in eventCards)
+                if (card.EventType != EventCardType.Clue)
+                    GameManager.instance.DeckManager.AddCard(card);
+                else
+                    clueCards.Add(card);
         }
 
-        GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
+        //Clue Cards go somewhere else
+        //GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
     }
 
-    public void InfectedEvent()
+    public void EndTurnCheck(bool nullifyDamage)
     {
-        UpdateEventDangerModifier(1);
-        OnEventChanged += InfectedEventRemoval;
+        foreach (SOEventCard eventCard in currentEventCards)
+            if (!nullifyDamage)
+                GameManager.instance.UpdatePlayerHealth(eventCard.CurrentDangerPoints + eventDangerModifier);
     }
 
-    private void Awake()
+    private void Start()
     {
-        if (deckController == null)
-            deckController = GetComponent<DeckController>();
-
+        currentEventCards = new List<SOEventCard>();
     }
 
-    private void Start() => deckController.RandomizeCardDeck();
-
-    private void InfectedEventRemoval()
+    private IEnumerable<SOEventCard> DrawEventCard()
     {
-        UpdateEventDangerModifier(1);
-        OnEventChanged -= InfectedEventRemoval;
+        return GameManager.instance.DeckManager.DrawRandomEventCard(1);
     }
 
-    private SOEventCard DrawEventCard()
+    private void RemoveEvent(SOEventCard eventToRemove)
     {
-        return (SOEventCard)deckController.DrawRandomCard();
+        eventToRemove.OnEventEnded();
+        Destroy(eventToRemove.CardUIOjbect);
+        currentEventCards.Remove(eventToRemove);
+
+        //OnEventSolved.Invoke();
+    }
+
+    private void UpdatePlayCount(SOEventCard card)
+    {
+        card.UpdatePlayCount(1);
     }
 }
