@@ -21,12 +21,12 @@ public class SOEventCard : SOCardBase
     public int CurrentDangerPoints { get => currentDangerPoints; }
     public int CurrentPlayNumber { get => currentPlayNumber; }
 
-    public void UpdateDangerPoints(int pointsToChange) => currentDangerPoints += pointsToChange;
+    public void UpdateDangerPoints(int pointsToChange) => currentDangerPoints -= pointsToChange;
     public void UpdatePlayCount(int pointsToChange) => currentPlayNumber += pointsToChange;
 
     public void OnEventStarted()
     {
-        currentDangerPoints = 0;
+        currentDangerPoints = maxDangerPoints;
         currentPlayNumber = 0;
     }
 

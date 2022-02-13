@@ -25,7 +25,8 @@ public class CardPlayController : MonoBehaviour
         if (currentUtility == null || currentEvent == null)
             return;
 
-        GameManager.instance.UtilityManager.PlayUtilityCard(currentUtility, currentEvent);
+        if(GameManager.instance.EventManager.UpdateEventDangerPoints(currentUtility, currentEvent))
+            GameManager.instance.UtilityManager.PlayUtilityCard(currentUtility, currentEvent);
 
         currentUtility = null;
         currentEvent = null;

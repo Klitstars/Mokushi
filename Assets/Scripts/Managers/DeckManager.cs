@@ -7,47 +7,50 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private EventDeckObject eventDeck;
     [SerializeField] private UtilityDeckObject utilityDeck;
 
-    public IEnumerable<SOEventCard> DrawRandomEventCard(int cardsToDraw = 1)
+    public IEnumerable<SOEventCard> DrawRandomEventCards(int cardsToDraw = 1)
     {
         List<SOEventCard> drawnCards = new List<SOEventCard>();
 
         for (int i = 0; i < cardsToDraw; i++)
-        {
-            if (eventDeck.CardDeck.Count == 0)
-                break;
+            drawnCards.Add(DrawRandomEventCard());
 
-            SOEventCard drawnCard = eventDeck.CardDeck[0];
-            
-            drawnCards.Add(drawnCard);
-
-            //WE NEED TO ADD A DISCARD DECK HERE
-
-            eventDeck.RemoveCard(drawnCard);
-        }
-
-        //AnnounceDrawEditor(drawnCards);
         return drawnCards;
     }
 
-    public IEnumerable<SOUtilityCard> DrawRandomUtilityCard(int cardsToDraw = 1)
+    public SOEventCard DrawRandomEventCard()
+    {
+        if (eventDeck.CardDeck.Count == 0)
+            return null;
+
+        SOEventCard drawnCard = eventDeck.CardDeck[0];
+        //WE NEED TO ADD A DISCARD DECK HERE
+        eventDeck.RemoveCard(drawnCard);
+
+        return drawnCard;
+    }
+
+    public IEnumerable<SOUtilityCard> DrawRandomUtilityCards(int cardsToDraw = 1)
     {
         List<SOUtilityCard> drawnCards = new List<SOUtilityCard>();
 
         for (int i = 0; i < cardsToDraw; i++)
-        {
-            if (utilityDeck.CardDeck.Count == 0)
-                break;
-
-            SOUtilityCard drawnCard = utilityDeck.CardDeck[0];
-
-            drawnCards.Add(drawnCard);
-
-            //WE NEED TO ADD A DISCARD DECK HERE
-
-            utilityDeck.RemoveCard(drawnCard);
-        }
+            drawnCards.Add(DrawRandomUtilityCard());
 
         return drawnCards;
+    }
+
+    public SOUtilityCard DrawRandomUtilityCard()
+    {
+        if (utilityDeck.CardDeck.Count == 0)
+            return null;
+
+        SOUtilityCard drawnCard = utilityDeck.CardDeck[0];
+        utilityDeck.RemoveCard(drawnCard);
+
+        //WE NEED TO ADD DISCARD DECK HANDLING HERE
+
+
+        return drawnCard;
     }
 
     public void RandomizeCardDecks()

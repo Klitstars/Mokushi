@@ -168,7 +168,7 @@ public class SOUtilityEffect : ScriptableObject
 
     private void DrawUtility(int magnitude)
     {
-        GameManager.instance.UtilityManager.DrawCard(magnitude);
+        GameManager.instance.UtilityManager.DrawCards(magnitude);
     }
 
     private void DrawEvent(int magnitude)
