@@ -8,7 +8,7 @@ public class SOUtilityEffect : ScriptableObject
     [Header("Base Effect Attributes")]
     [SerializeField] private UtilityEffectTypes effectType;
     [SerializeField] private int effectMagnitude;
-    [SerializeField] private Equipment effectTarget;
+    [SerializeField] private EffectTargets effectTarget;
 
 
     [Header("Effects With A Turn Duration")]
@@ -29,14 +29,10 @@ public class SOUtilityEffect : ScriptableObject
         DetermineCancelation(-effectMagnitude, effectTarget);
     }
 
-    private void DetermineEffect(int effectMagnitude, Equipment effectTarget)
+    private void DetermineEffect(int effectMagnitude, EffectTargets effectTarget)
     {
         switch(effectType)
         {
-            case UtilityEffectTypes.Clue:
-                ClueEffect();
-                return;
-
             case UtilityEffectTypes.DrawUtility:
                 DrawUtility(effectMagnitude);
                 return;
@@ -55,7 +51,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.DangerPointModifier:
-                DangerPointModifier(effectMagnitude);
+                DangerPointModifier(effectMagnitude, effectTarget);
                 return;
 
             case UtilityEffectTypes.PlayCountModifier:
@@ -67,7 +63,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.NullifyEventDamage:
-                NullifyEventDamage();
+                NullifyEventDamage(true);
                 return;
 
             case UtilityEffectTypes.MandatoryPlay:
@@ -76,14 +72,6 @@ public class SOUtilityEffect : ScriptableObject
 
             case UtilityEffectTypes.CycleEventDraw:
                 CycleEventDraw(effectMagnitude);
-                return;
-
-            case UtilityEffectTypes.PayItemToEvent:
-                PayItemToEvent(effectTarget);
-                return;
-
-            case UtilityEffectTypes.DestroyEquippedItem:
-                DestroyEquippedItem();
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
@@ -96,14 +84,10 @@ public class SOUtilityEffect : ScriptableObject
         }
     }
 
-    private void DetermineCancelation(int effectMagnitude, Equipment effectTarget)
+    private void DetermineCancelation(int effectMagnitude, EffectTargets effectTarget)
     {
         switch (effectType)
         {
-            case UtilityEffectTypes.Clue:
-                ClueEffect();
-                return;
-
             case UtilityEffectTypes.ReorderEventDeck:
                 ReorderEvents(-effectMagnitude);
                 return;
@@ -113,7 +97,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.DangerPointModifier:
-                DangerPointModifier(-effectMagnitude);
+                DangerPointModifier(-effectMagnitude, effectTarget);
                 return;
 
             case UtilityEffectTypes.PlayCountModifier:
@@ -125,7 +109,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.NullifyEventDamage:
-                NullifyEventDamage();
+                NullifyEventDamage(false);
                 return;
 
             case UtilityEffectTypes.MandatoryPlay:
@@ -134,12 +118,6 @@ public class SOUtilityEffect : ScriptableObject
 
             case UtilityEffectTypes.CycleEventDraw:
                 CycleEventDraw(-effectMagnitude);
-                return;
-
-            case UtilityEffectTypes.PayItemToEvent:
-                return;
-
-            case UtilityEffectTypes.DestroyEquippedItem:
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
@@ -159,11 +137,6 @@ public class SOUtilityEffect : ScriptableObject
             CancelEffects();
             GameManager.OnStartNewTurn -= CancelTimer;
         }
-    }
-
-    private void ClueEffect()
-    {
-        //We need some way to indicate you have gotten clues.
     }
 
     private void DrawUtility(int magnitude)
@@ -197,9 +170,9 @@ public class SOUtilityEffect : ScriptableObject
         GameManager.instance.EventManager.UpdateEventPlayCountModifier(magnitude);
     }
 
-    private void NullifyEventDamage()
+    private void NullifyEventDamage(bool isDamageNullified)
     {
-        GameManager.instance.nullifyDamage = true;
+        GameManager.instance.nullifyDamage = isDamageNullified;
     }
 
     private void CycleEventDraw(int magnitude)
@@ -207,19 +180,9 @@ public class SOUtilityEffect : ScriptableObject
         //UI component that lets the player choose to discard an event.
     }
 
-    private void DestroyEquippedItem()
-    {
-        GameManager.instance.UtilityManager.RemoveEquipment();
-    }
-
     private void MandatoryPlay()
     {
         //UI component that disallows ending the turn until this card is played.
-    }
-
-    private void PayItemToEvent(Equipment effectTarget)
-    {
-        //Event that accepts EquipmentCard as payment.
     }
 
     private void ModifyDamageTaken(int effectMagnitude)

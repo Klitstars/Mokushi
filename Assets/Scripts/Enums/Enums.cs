@@ -24,10 +24,26 @@ public enum UtilityEffectTypes
     NullifyEventDamage,
     DamageTakenModifier,
     MandatoryPlay,
-    Clue,
     CycleEventDraw,
+}
+
+public enum EffectTargets
+{
+    None,
+    CurrentEquipment,
+    BrokenKatana,
+    Katana,
+    Shurikens,
+    GrapplingHook
+
+}
+
+public enum EventEffectTypes
+{
+    Clue,
     DestroyEquippedItem,
-    PayItemToEvent
+    PayItemToEvent,
+    DamageTakenModifier,
 }
 
 public enum Equipment

@@ -11,8 +11,7 @@ public class EventManager : MonoBehaviour
     public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
-
-
+    
     public void DrawAndUpdateEvents(int eventsToDraw)
     {
         for(int i = 0; i < eventsToDraw; i++)
@@ -83,8 +82,12 @@ public class EventManager : MonoBehaviour
     public void EndTurnCheck(bool nullifyDamage)
     {
         foreach (SOEventCard eventCard in currentEventCards)
+        {
             if (!nullifyDamage)
                 GameManager.instance.UpdatePlayerHealth(-eventCard.CurrentDangerPoints + eventDangerModifier);
+
+            RemoveEvent(eventCard);
+        }
     }
 
     private void Start()

@@ -32,6 +32,7 @@ public class UtilityManager : MonoBehaviour
 
         newUtility.PlayUtilityCard();
         GameManager.instance.HandManager.RemoveCardFromHand(newUtility);
+        GameManager.instance.DeckManager.AddCard(newUtility);
     }
 
     public void Unequip()

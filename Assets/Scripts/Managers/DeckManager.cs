@@ -42,7 +42,10 @@ public class DeckManager : MonoBehaviour
     public SOUtilityCard DrawRandomUtilityCard()
     {
         if (utilityDeck.CardDeck.Count == 0)
+        {
+            Debug.Log("Not enough utility cards to draw more!");
             return null;
+        }
 
         SOUtilityCard drawnCard = utilityDeck.CardDeck[0];
         utilityDeck.RemoveCard(drawnCard);
@@ -58,6 +61,7 @@ public class DeckManager : MonoBehaviour
         List<SOEventCard> newEventDeckOrder = new List<SOEventCard>();
         int deckCount = eventDeck.CardDeck.Count;
 
+
         for(int i = 0; i < deckCount; i++)
         {
             int randomInt = Random.Range(0, eventDeck.CardDeck.Count);
@@ -70,6 +74,7 @@ public class DeckManager : MonoBehaviour
 
         List<SOUtilityCard> newUtilityDeckOrder = new List<SOUtilityCard>();
         deckCount = utilityDeck.CardDeck.Count;
+
 
         for (int i = 0; i < deckCount; i++)
         {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int maxHealth;
@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
 
         OnStartNewTurn += UtilityManager.DrawCard;
         OnStartNewTurn += EventManager.DrawAndUpdateEvents;
+    }
+
+    public void StartNewGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void EndTurn()

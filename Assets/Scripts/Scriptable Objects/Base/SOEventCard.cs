@@ -13,6 +13,8 @@ public class SOEventCard : SOCardBase
 
     private int currentDangerPoints;
     private int currentPlayNumber;
+    private int eventDangerModifier = 0;
+    private int eventPlayCountModifier = 0;
 
     public EventCardType EventType { get => eventType; }
     public SOEventEffect EventEffect { get => eventEffect; }
