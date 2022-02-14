@@ -57,7 +57,6 @@ public class SOUtilityCard : SOCardBase
     {
         IterateThroughEffectCancellations();
 
-        CardUIOjbect.GetComponent<CardUIObject>().NullifyUI();
         UtilityManager.OnEquipItem -= OnEquipEffect;
         UtilityManager.OnUnequipItem -= OnUnequipEffect;
     }

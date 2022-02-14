@@ -53,6 +53,7 @@ public class PlayFieldUIManager : MonoBehaviour
         if (card == null)
             return;
 
+        Debug.Log("Adding " + card.name + " to hand.");
         hand.Add(card);
         GameManager.instance.CardBuilder.GenerateCard(card, UtilityPosition.Hand);
     }

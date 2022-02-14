@@ -31,6 +31,8 @@ public class CardUIObject : MonoBehaviour
 
     public void InitCardUI(SOUtilityCard newCard)
     {
+        Debug.Log("Initializing " + newCard.name + " for hand.");
+
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
         cardName.text = newCard.CardName;

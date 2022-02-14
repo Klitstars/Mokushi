@@ -4177,9 +4177,15 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
+      propertyPath: utilityDeck.cardDeck.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: b78bd18e69916a845aa168a9e00158e7,
+        type: 2}
+    - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
+        type: 3}
       propertyPath: utilityDeck.cardDeck.Array.data[5]
       value: 
-      objectReference: {fileID: 11400000, guid: 9e6aea1ebe045c149b2b7abb6efaf653,
+      objectReference: {fileID: 11400000, guid: fedda5b12e0bb5a4cb4185927093acc0,
         type: 2}
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
