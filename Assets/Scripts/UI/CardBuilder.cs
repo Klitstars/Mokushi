@@ -8,7 +8,6 @@ public class CardBuilder : MonoBehaviour
 {
     [Header("Card Prefabs")]
     [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private CardUIObject equipmentCard;
 
     [Header("Card Positions")]
     [SerializeField] private Transform handPosition;
@@ -49,10 +48,5 @@ public class CardBuilder : MonoBehaviour
 
 
         return newCardUI;
-    }
-
-    public void RebuildEquipmentCard(SOUtilityCard cardData)
-    {
-        equipmentCard.UpdateEquipmentUI(cardData);
     }
 }

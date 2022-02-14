@@ -19,5 +19,5 @@ MonoBehaviour:
   cardType: 1
   maxDangerPoints: 0
   maxPlayNumber: 0
-  eventType: 0
+  eventType: 1
   eventEffect: {fileID: 11400000, guid: b46bd4a0aecea6347aa1901ad81540d8, type: 2}

@@ -5,20 +5,30 @@ using TMPro;
 
 public class PlayFieldUIManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text playerHealth;
-    [SerializeField] private TMP_Text turnCount;
+    [SerializeField] private TMP_Text playerHealthText;
+    [SerializeField] private TMP_Text turnCountText;
+    [SerializeField] private TMP_Text clueCountText;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject grapplingHookPanel;
     [SerializeField] private CardUIObject equipmentSlot;
+    [SerializeField] private CardUIObject discardEventCard;
 
     private List<SOUtilityCard> hand;
+    private SOEventCard grapplingHookDiscardEvent;
 
     public void UpdatePlayerHealth(int currentHealth)
     {
-        playerHealth.text = currentHealth.ToString();
+        playerHealthText.text = currentHealth.ToString();
     }
 
     public void UpdateTurnCount(int currentTurn)
     {
-        turnCount.text = currentTurn.ToString();
+        turnCountText.text = currentTurn.ToString();
+    }
+
+    public void UpdateClueCount(int clueCount)
+    {
+        clueCountText.text = clueCount.ToString();
     }
 
     public int DiscardHand()
@@ -82,6 +92,27 @@ public class PlayFieldUIManager : MonoBehaviour
     public void NullifyEquipment()
     {
         equipmentSlot.NullifyUI();
+    }
+
+    public void GameOver(bool win)
+    {
+        gameOverPanel.SetActive(true);
+    }
+
+    public void GrapplingHookEventCheck(SOEventCard newEvent, int dangerPoints, int playCount)
+    {
+        Debug.Log("Grappling hook check.");
+        if (grapplingHookDiscardEvent != null)
+            grapplingHookDiscardEvent = null;
+
+        grapplingHookDiscardEvent = newEvent;
+        grapplingHookPanel.SetActive(true);
+        discardEventCard.UpdateCardUI(newEvent, dangerPoints, playCount);
+    }
+
+    public void GrapplingHookEventDiscard()
+    {
+        GameManager.instance.EventManager.GrapplingHookUtilityDiscard(grapplingHookDiscardEvent);
     }
 
     private void Start()

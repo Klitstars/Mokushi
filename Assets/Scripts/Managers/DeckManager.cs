@@ -20,7 +20,10 @@ public class DeckManager : MonoBehaviour
     public SOEventCard DrawRandomEventCard()
     {
         if (eventDeck.CardDeck.Count == 0)
+        {
+            Debug.Log("Not enough event cards to draw more!");
             return null;
+        }
 
         SOEventCard drawnCard = eventDeck.CardDeck[0];
         //WE NEED TO ADD A DISCARD DECK HERE

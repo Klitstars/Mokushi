@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxHealth;
     [SerializeField] private int currentHealth;
     [SerializeField] private int startingDrawCount;
+
     private int utilityDrawModifier = 0;
     private int eventDrawModifier = 0;
     private int damageModifier = 0;
     private int currentTurnCount = 1;
+    private int clueCount = 0;
     private bool gameStarted = false;
 
     public static GameManager instance;
@@ -44,6 +46,15 @@ public class GameManager : MonoBehaviour
         currentHealth += amountToModify;
 
         playFieldUIManager.UpdatePlayerHealth(currentHealth);
+    }
+
+    public void UpdateClueCount(int amountToModify)
+    {
+        clueCount += amountToModify;
+        playFieldUIManager.UpdateClueCount(clueCount);
+
+        if (clueCount >= 4)
+            PlayFieldUIManager.GameOver(true);
     }
 
     [ContextMenu("StartGame")]
@@ -123,7 +134,7 @@ public class GameManager : MonoBehaviour
 
     private void LoseGame()
     {
-        Debug.Log("Lost the game.");
+        PlayFieldUIManager.GameOver(false);
         //Do something here.
     }
 

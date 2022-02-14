@@ -8,41 +8,34 @@ public class EventManager : MonoBehaviour
     [SerializeField] private int eventDangerModifier = 0;
     [SerializeField] private int eventPlayCountModifier = 0;
 
+    [SerializeField] public bool hasGrapplingHook = false;
+    [SerializeField] private int grapplingHookEventDrawCount = 0;
     public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
     
     public void DrawCardsAndUpdateEvents(int eventsToDraw)
     {
-        for(int i = 0; i < eventsToDraw; i++)
-        {
-            List<SOEventCard> newCards = new List<SOEventCard>((List<SOEventCard>)GameManager.instance.DeckManager.DrawRandomEventCards());
-
-            if (newCards.Count == 0)
-                return;
-
-            foreach(SOEventCard card in newCards)
-            {
-                currentEventCards.Add(card);
-                GameManager.instance.CardBuilder.GenerateCard(card);
-                card.OnEventStarted();
-            }            
-        }
-
-        UpdateEventStats();
-
-        //Need UI Update here.
+        for (int i = 0; i < eventsToDraw; i++)
+            DrawCardAndUpdateEvents();
     }
 
     public void DrawCardAndUpdateEvents()
     {
         SOEventCard newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
-        GameManager.instance.CardBuilder.GenerateCard(newEvent);
 
+        if (newEvent == null)
+            return;
+
+        GameManager.instance.CardBuilder.GenerateCard(newEvent);
         currentEventCards.Add(newEvent);
         newEvent.OnEventStarted();
 
         UpdateEventStats();
+        grapplingHookEventDrawCount++;
+
+        if (hasGrapplingHook)
+            CheckDiscardEvent(newEvent);
         //Need UI Update here.
     }
 
@@ -63,7 +56,7 @@ public class EventManager : MonoBehaviour
         return true;
     }
 
-    public void DiscardEventCards(int cardsToDiscard)
+    public void SenbonzakuraUtilityDiscard(int cardsToDiscard)
     {
         //Do we need some kind of animation here for the event card cycling?
         List<SOCardBase> clueCards = new List<SOCardBase>();
@@ -83,6 +76,11 @@ public class EventManager : MonoBehaviour
         //GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
     }
 
+    public void GrapplingHookUtilityDiscard(SOEventCard eventToDiscard)
+    {
+        RemoveEvent(eventToDiscard);
+    }
+
     public void EndTurnCheck(bool nullifyDamage)
     {
         List<SOEventCard> eventsToRemove = new List<SOEventCard>();
@@ -99,11 +97,17 @@ public class EventManager : MonoBehaviour
             RemoveEvent(eventCard);
     }
 
+    public void RemoveClue(SOEventCard clueCard)
+    {
+        GameManager.instance.UpdateClueCount(1);
+        RemoveEvent(clueCard);
+    }
+
     private void Start()
     {
         currentEventCards = new List<SOEventCard>();
         SOUtilityEffect.OnStatsChanged += UpdateEventStats;
-        SOUtilityEffect.OnStatsChanged += StatAnnouncement;
+        GameManager.OnStartNewTurn += ResetGrapplingCount;
     }
 
     private IEnumerable<SOEventCard> DrawEventCard()
@@ -136,20 +140,27 @@ public class EventManager : MonoBehaviour
         return true;
     }
 
-    private void StatAnnouncement()
-    {
-        Debug.Log("Stats changed!");
-    }
-
     private void UpdateEventStats()
     {
         foreach(SOEventCard card in currentEventCards)
         {
-            Debug.Log("Old Danger Points: " + card.CurrentDangerPoints);
-            Debug.Log("Modified Danger Points: " + (card.CurrentDangerPoints + eventDangerModifier));
-
             GameManager.instance.PlayFieldUIManager.UpdateEventCardUI(
                 card, card.CurrentDangerPoints + eventDangerModifier, card.CurrentPlayNumber + eventPlayCountModifier);
         }            
+    }
+
+    private void ResetGrapplingCount()
+    {
+        grapplingHookEventDrawCount = 0;
+    }
+
+    private void CheckDiscardEvent(SOEventCard newEvent)
+    {
+        if(hasGrapplingHook)
+        {
+            if (grapplingHookEventDrawCount == 2)
+                GameManager.instance.PlayFieldUIManager.GrapplingHookEventCheck(
+                    newEvent, newEvent.CurrentDangerPoints + eventDangerModifier, newEvent.CurrentPlayNumber + eventPlayCountModifier);
+        }        
     }
 }

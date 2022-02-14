@@ -19,5 +19,5 @@ MonoBehaviour:
   cardType: 1
   maxDangerPoints: 2
   maxPlayNumber: 2
-  eventType: 0
+  eventType: 1
   eventEffect: {fileID: 0}

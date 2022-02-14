@@ -76,6 +76,9 @@ public class CardUIObject : MonoBehaviour
 
     public void UpdateCardUI(SOEventCard newCard, int dangerPoints, int playCount)
     {
+        if (newCard == null)
+            return;
+
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
         cardName.text = newCard.CardName;
@@ -84,17 +87,27 @@ public class CardUIObject : MonoBehaviour
         playCountPointsText.text = playCount.ToString();
 
         eventCardData = newCard;
-        newCard.CardUIOjbect = this.gameObject;
     }
 
     public void InitCardUI(SOEventCard newCard)
     {
+        if (newCard == null)
+            return; 
+
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
         cardName.text = newCard.CardName;
         cardDescription.text = newCard.CardDescription;
         dangerPointsText.text = newCard.CurrentDangerPoints.ToString();
         playCountPointsText.text = newCard.CurrentPlayNumber.ToString();
+
+        if (newCard.EventType == EventCardType.Clue)
+        {
+            dangerText.text = "";
+            dangerPointsText.text = "";
+            playCountText.text = "";
+            playCountPointsText.text = "";
+        }        
 
         eventCardData = newCard;
         newCard.CardUIOjbect = this.gameObject;
@@ -104,13 +117,12 @@ public class CardUIObject : MonoBehaviour
     {
         if(utilityCardData != null)
         {
-            Debug.Log("Utility selected: " + utilityCardData.name);
             GameManager.instance.CardPlayController.UpdateSelectedUtility(UtilityCardData);
             return;
         }
+
         if(eventCardData != null)
         {
-            Debug.Log("Event selected: " + eventCardData.name);
             GameManager.instance.CardPlayController.UpdateSelectedEvent(EventCardData);
             return;
         }

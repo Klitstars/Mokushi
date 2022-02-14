@@ -74,7 +74,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.CycleEventDraw:
-                CycleEventDraw(effectMagnitude);
+                CycleEventDraw(true);
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
@@ -120,7 +120,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.CycleEventDraw:
-                CycleEventDraw(effectMagnitude);
+                CycleEventDraw(false);
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
@@ -180,9 +180,9 @@ public class SOUtilityEffect : ScriptableObject
         GameManager.instance.nullifyDamage = isDamageNullified;
     }
 
-    private void CycleEventDraw(int magnitude)
+    private void CycleEventDraw(bool hasGrapplingHook)
     {
-        //UI component that lets the player choose to discard an event.
+        GameManager.instance.EventManager.hasGrapplingHook = hasGrapplingHook;
     }
 
     private void MandatoryPlay()
