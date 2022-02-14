@@ -27,19 +27,9 @@ public enum UtilityEffectTypes
     CycleEventDraw,
 }
 
-public enum EffectTargets
-{
-    None,
-    CurrentEquipment,
-    BrokenKatana,
-    Katana,
-    Shurikens,
-    GrapplingHook
-
-}
-
 public enum EventEffectTypes
 {
+    None,
     Clue,
     DestroyEquippedItem,
     PayItemToEvent,
@@ -57,6 +47,14 @@ public enum Equipment
 
 public enum EventCardType
 {
+    None,
     Event,
     Clue
+}
+
+public enum UtilityPosition
+{
+    None,
+    Hand,
+    EquipmentSlot
 }

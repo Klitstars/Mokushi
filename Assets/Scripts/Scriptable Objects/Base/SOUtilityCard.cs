@@ -7,12 +7,14 @@ public class SOUtilityCard : SOCardBase
 {
     [Header("Utility Attributes")]
     [SerializeField] protected Utility utilityType;
+    [SerializeField] protected Equipment equipmentType;
     [SerializeField] protected int utilityPoints;
 
     [Header("Card Effects")]
     [SerializeField] protected List<SOUtilityEffect> utilityEffects;
 
     public Utility UtilityType { get => utilityType; }
+    public Equipment EquipmentType { get => equipmentType; }
     public int UtilityPoints { get => utilityPoints; }
     public List<SOUtilityEffect> UtilityEffects { get => utilityEffects; }
 
@@ -55,6 +57,7 @@ public class SOUtilityCard : SOCardBase
     {
         IterateThroughEffectCancellations();
 
+        CardUIOjbect.GetComponent<CardUIObject>().NullifyUI();
         UtilityManager.OnEquipItem -= OnEquipEffect;
         UtilityManager.OnUnequipItem -= OnUnequipEffect;
     }

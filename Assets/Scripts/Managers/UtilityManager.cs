@@ -11,17 +11,19 @@ public class UtilityManager : MonoBehaviour
     public delegate void onUnequipItem();
     public static event onEquipItem OnUnequipItem;
 
+    public SOUtilityCard EquippedUtility { get => currentEquipment; }
+
     public void DrawCard()
     {
-        GameManager.instance.HandManager.AddCardToHand(GameManager.instance.DeckManager.DrawRandomUtilityCard());
+        GameManager.instance.PlayFieldUIManager.AddCardToHand(GameManager.instance.DeckManager.DrawRandomUtilityCard());
     }
     public void DrawCards(int cardsToDraw = 1)
     {
         IEnumerable<SOUtilityCard> drawnCards = GameManager.instance.DeckManager.DrawRandomUtilityCards(cardsToDraw);
-        GameManager.instance.HandManager.AddCardsToHand(drawnCards);
+        GameManager.instance.PlayFieldUIManager.AddCardsToHand(drawnCards);
     }
 
-    public void PlayUtilityCard(SOUtilityCard newUtility, SOEventCard currentEventTarget)
+    public void PlayUtilityCard(SOUtilityCard newUtility)
     {
         if (newUtility.UtilityType == Utility.Equipment)
         {
@@ -31,7 +33,7 @@ public class UtilityManager : MonoBehaviour
         }
 
         newUtility.PlayUtilityCard();
-        GameManager.instance.HandManager.RemoveCardFromHand(newUtility);
+        GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(newUtility);
         GameManager.instance.DeckManager.AddCard(newUtility);
     }
 
@@ -39,11 +41,18 @@ public class UtilityManager : MonoBehaviour
     {
         if (currentEquipment != null)
         {
-            GameManager.instance.HandManager.AddCardsToHand((IEnumerable<SOUtilityCard>)currentEquipment);
+            GameManager.instance.PlayFieldUIManager.AddCardToHand(currentEquipment);
             RemoveEquipment();
-
-            currentEquipment = null;
         }
+    }
+
+    public void DestroyEquipment()
+    {
+        if (currentEquipment == null)
+            return;
+
+        Destroy(currentEquipment.CardUIOjbect);
+        RemoveEquipment();
     }
 
     public void RemoveEquipment()
@@ -57,8 +66,11 @@ public class UtilityManager : MonoBehaviour
         Unequip();
 
         currentEquipment = newEquipment;
+        GameManager.instance.PlayFieldUIManager.UpdateEquippedUtility(newEquipment);
+        newEquipment.PlayUtilityCard();
 
         OnEquipItem.Invoke();
+        GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(newEquipment);
     }
 
     private void SmokescreenRemoval()

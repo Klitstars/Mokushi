@@ -8,17 +8,19 @@ public class SOUtilityEffect : ScriptableObject
     [Header("Base Effect Attributes")]
     [SerializeField] private UtilityEffectTypes effectType;
     [SerializeField] private int effectMagnitude;
-    [SerializeField] private EffectTargets effectTarget;
 
 
     [Header("Effects With A Turn Duration")]
     [SerializeField] private int effectDuration;
 
+    public delegate void onStatsChanged();
+    public static event onStatsChanged OnStatsChanged;
+
     private int currentDurationTimer = 0;
-    
+
     public void InitiateEffect()
     {
-        DetermineEffect(effectMagnitude, effectTarget);
+        DetermineEffect(effectMagnitude);
 
         if (effectDuration > 0)
             GameManager.OnStartNewTurn += CancelTimer;
@@ -26,10 +28,11 @@ public class SOUtilityEffect : ScriptableObject
 
     public void CancelEffects()
     {
-        DetermineCancelation(-effectMagnitude, effectTarget);
+        Debug.Log("Cancelling effects");
+        DetermineCancelation(-effectMagnitude);
     }
 
-    private void DetermineEffect(int effectMagnitude, EffectTargets effectTarget)
+    private void DetermineEffect(int effectMagnitude)
     {
         switch(effectType)
         {
@@ -84,28 +87,28 @@ public class SOUtilityEffect : ScriptableObject
         }
     }
 
-    private void DetermineCancelation(int effectMagnitude, EffectTargets effectTarget)
+    private void DetermineCancelation(int effectMagnitude)
     {
         switch (effectType)
         {
             case UtilityEffectTypes.ReorderEventDeck:
-                ReorderEvents(-effectMagnitude);
+                ReorderEvents(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.ReorderUtilityDeck:
-                ReorderUtility(-effectMagnitude);
+                ReorderUtility(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.DangerPointModifier:
-                DangerPointModifier(-effectMagnitude);
+                DangerPointModifier(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.PlayCountModifier:
-                PlayCountModifier(-effectMagnitude);
+                PlayCountModifier(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.DamageTakenModifier:
-                ModifyDamageTaken(-effectMagnitude);
+                ModifyDamageTaken(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.NullifyEventDamage:
@@ -117,7 +120,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.CycleEventDraw:
-                CycleEventDraw(-effectMagnitude);
+                CycleEventDraw(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
@@ -146,7 +149,7 @@ public class SOUtilityEffect : ScriptableObject
 
     private void DrawEvent(int magnitude)
     {
-        GameManager.instance.EventManager.DrawAndUpdateEvents(magnitude);
+        GameManager.instance.EventManager.DrawCardsAndUpdateEvents(magnitude);
     }
 
     private void ReorderUtility(int magnitude)
@@ -163,11 +166,13 @@ public class SOUtilityEffect : ScriptableObject
     private void DangerPointModifier(int magnitude)
     {
         GameManager.instance.EventManager.UpdateEventDangerModifier(magnitude);
+        OnStatsChanged.Invoke();
     }
 
     private void PlayCountModifier(int magnitude)
     {
         GameManager.instance.EventManager.UpdateEventPlayCountModifier(magnitude);
+        OnStatsChanged.Invoke();
     }
 
     private void NullifyEventDamage(bool isDamageNullified)

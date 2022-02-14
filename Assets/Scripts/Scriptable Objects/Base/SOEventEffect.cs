@@ -8,21 +8,20 @@ public class SOEventEffect : SOEventEffectBase
     [Header("Base Effect Attributes")]
     [SerializeField] private EventEffectTypes effectType;
     [SerializeField] private int effectMagnitude;
-    [SerializeField] private EffectTargets effectTarget;
+    [SerializeField] private Equipment effectTarget;
 
-    private int currentDurationTimer = 0;
 
     public void InitiateEffect()
     {
-        DetermineEffect(effectMagnitude, effectTarget);
+        DetermineEffect(effectMagnitude);
     }
 
     public void CancelEffects()
     {
-        DetermineCancelation(-effectMagnitude, effectTarget);
+        DetermineCancelation(-effectMagnitude);
     }
 
-    private void DetermineEffect(int effectMagnitude, EffectTargets effectTarget)
+    private void DetermineEffect(int effectMagnitude)
     {
         switch (effectType)
         {
@@ -35,12 +34,12 @@ public class SOEventEffect : SOEventEffectBase
                 return;
 
             case EventEffectTypes.DestroyEquippedItem:
-                DestroyEquippedItem();
+                DestroyEquippedItem(effectTarget);
                 return;
         }
     }
 
-    private void DetermineCancelation(int effectMagnitude, EffectTargets effectTarget)
+    private void DetermineCancelation(int effectMagnitude)
     {
         switch (effectType)
         {
@@ -61,12 +60,15 @@ public class SOEventEffect : SOEventEffectBase
         GameManager.instance.UpdateDamageModifier(effectMagnitude);
     }
 
-    private void DestroyEquippedItem()
+    private void DestroyEquippedItem(Equipment effectTarget)
     {
-        GameManager.instance.UtilityManager.RemoveEquipment();
+        if (effectTarget == Equipment.None)
+            GameManager.instance.UtilityManager.RemoveEquipment();
+        else if (GameManager.instance.UtilityManager.EquippedUtility.EquipmentType != effectTarget)
+            GameManager.instance.UtilityManager.RemoveEquipment();
     }
 
-    private void PayItemToEvent(EffectTargets effectTarget)
+    private void PayItemToEvent(Equipment effectTarget)
     {
         //Event that accepts EquipmentCard as payment.
     }

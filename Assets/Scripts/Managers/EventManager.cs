@@ -12,7 +12,7 @@ public class EventManager : MonoBehaviour
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
     
-    public void DrawAndUpdateEvents(int eventsToDraw)
+    public void DrawCardsAndUpdateEvents(int eventsToDraw)
     {
         for(int i = 0; i < eventsToDraw; i++)
         {
@@ -29,10 +29,12 @@ public class EventManager : MonoBehaviour
             }            
         }
 
+        UpdateEventStats();
+
         //Need UI Update here.
     }
 
-    public void DrawAndUpdateEvents()
+    public void DrawCardAndUpdateEvents()
     {
         SOEventCard newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
         GameManager.instance.CardBuilder.GenerateCard(newEvent);
@@ -40,10 +42,11 @@ public class EventManager : MonoBehaviour
         currentEventCards.Add(newEvent);
         newEvent.OnEventStarted();
 
+        UpdateEventStats();
         //Need UI Update here.
     }
 
-    public bool UpdateEventDangerPoints(SOUtilityCard utility, SOEventCard targetEvent)
+    public bool PlayUtilityOnEvent(SOUtilityCard utility, SOEventCard targetEvent)
     {
         if (!CheckEventIsPlayable(targetEvent))
             return false;
@@ -55,7 +58,8 @@ public class EventManager : MonoBehaviour
         if (targetEvent.CurrentDangerPoints + eventDangerModifier <= 0)
             RemoveEvent(targetEvent);
 
-        UpdatePlayCount(targetEvent);
+        targetEvent.UpdatePlayCount(1);
+        UpdateEventStats();
         return true;
     }
 
@@ -81,18 +85,25 @@ public class EventManager : MonoBehaviour
 
     public void EndTurnCheck(bool nullifyDamage)
     {
+        List<SOEventCard> eventsToRemove = new List<SOEventCard>();
+
         foreach (SOEventCard eventCard in currentEventCards)
         {
             if (!nullifyDamage)
                 GameManager.instance.UpdatePlayerHealth(-eventCard.CurrentDangerPoints + eventDangerModifier);
 
-            RemoveEvent(eventCard);
+            eventsToRemove.Add(eventCard);
         }
+
+        foreach (SOEventCard eventCard in eventsToRemove)
+            RemoveEvent(eventCard);
     }
 
     private void Start()
     {
         currentEventCards = new List<SOEventCard>();
+        SOUtilityEffect.OnStatsChanged += UpdateEventStats;
+        SOUtilityEffect.OnStatsChanged += StatAnnouncement;
     }
 
     private IEnumerable<SOEventCard> DrawEventCard()
@@ -107,11 +118,6 @@ public class EventManager : MonoBehaviour
         currentEventCards.Remove(eventToRemove);
     }
 
-    private void UpdatePlayCount(SOEventCard card)
-    {
-        card.UpdatePlayCount(1);
-    }
-
     private bool CheckEventIsPlayable(SOEventCard targetEvent)
     {
         if (!currentEventCards.Contains(targetEvent))
@@ -120,7 +126,7 @@ public class EventManager : MonoBehaviour
             return false;
         }
 
-        if (targetEvent.CurrentPlayNumber >= targetEvent.MaxPlayNumber + eventPlayCountModifier)
+        if (targetEvent.CurrentPlayNumber + eventPlayCountModifier <= 0)
         {
             Debug.Log("Failed to update Event Card because the Max Play Number is: " + (targetEvent.MaxPlayNumber + eventPlayCountModifier)
                 + " and the Current Play Number is: " + targetEvent.CurrentPlayNumber);
@@ -128,5 +134,22 @@ public class EventManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void StatAnnouncement()
+    {
+        Debug.Log("Stats changed!");
+    }
+
+    private void UpdateEventStats()
+    {
+        foreach(SOEventCard card in currentEventCards)
+        {
+            Debug.Log("Old Danger Points: " + card.CurrentDangerPoints);
+            Debug.Log("Modified Danger Points: " + (card.CurrentDangerPoints + eventDangerModifier));
+
+            GameManager.instance.PlayFieldUIManager.UpdateEventCardUI(
+                card, card.CurrentDangerPoints + eventDangerModifier, card.CurrentPlayNumber + eventPlayCountModifier);
+        }            
     }
 }

@@ -20,16 +20,16 @@ public class SOEventCard : SOCardBase
     public SOEventEffect EventEffect { get => eventEffect; }
     public int MaxDangerPoints { get => maxDangerPoints; }
     public int MaxPlayNumber { get => maxPlayNumber; }
-    public int CurrentDangerPoints { get => currentDangerPoints; }
-    public int CurrentPlayNumber { get => currentPlayNumber; }
+    public int CurrentDangerPoints { get => currentDangerPoints; set => currentDangerPoints = value; }
+    public int CurrentPlayNumber { get => currentPlayNumber; set => currentPlayNumber = value; }
 
     public void UpdateDangerPoints(int pointsToChange) => currentDangerPoints -= pointsToChange;
-    public void UpdatePlayCount(int pointsToChange) => currentPlayNumber += pointsToChange;
+    public void UpdatePlayCount(int pointsToChange) => currentPlayNumber -= pointsToChange;
 
     public void OnEventStarted()
     {
         currentDangerPoints = maxDangerPoints;
-        currentPlayNumber = 0;
+        currentPlayNumber = maxPlayNumber;
     }
 
     public void OnEventEnded()

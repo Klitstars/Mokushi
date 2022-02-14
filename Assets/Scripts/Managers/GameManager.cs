@@ -10,11 +10,14 @@ public class GameManager : MonoBehaviour
     private int utilityDrawModifier = 0;
     private int eventDrawModifier = 0;
     private int damageModifier = 0;
+    private int currentTurnCount = 1;
+    private bool gameStarted = false;
+
     public static GameManager instance;
 
     private UtilityManager utilityManager;
     private EventManager eventManager;
-    private HandManager handManager;
+    private PlayFieldUIManager playFieldUIManager;
     private DeckManager deckManager;
     private CardBuilder cardBuilder;
     private CardPlayController cardPlayController;
@@ -25,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public UtilityManager UtilityManager { get => utilityManager; }
     public EventManager EventManager { get => eventManager; }
-    public HandManager HandManager { get => handManager; }
+    public PlayFieldUIManager PlayFieldUIManager { get => playFieldUIManager; }
     public DeckManager DeckManager { get => deckManager; }
     public CardBuilder CardBuilder { get => cardBuilder; }
     public CardPlayController CardPlayController { get => cardPlayController; }
@@ -38,25 +41,29 @@ public class GameManager : MonoBehaviour
     public void UpdateDamageModifier(int amountToModify) => damageModifier += damageModifier;
     public void UpdatePlayerHealth(int amountToModify)
     {
-        if (!nullifyDamage)
-            currentHealth += amountToModify;
+        currentHealth += amountToModify;
 
-        Debug.Log("Current player health is: " + currentHealth);
+        playFieldUIManager.UpdatePlayerHealth(currentHealth);
     }
 
     [ContextMenu("StartGame")]
     public void StartGame()
     {
         utilityManager.DrawCards(7);
-        eventManager.DrawAndUpdateEvents(1);
+        eventManager.DrawCardAndUpdateEvents();
+        playFieldUIManager.UpdatePlayerHealth(currentHealth);
 
         OnStartNewTurn += UtilityManager.DrawCard;
-        OnStartNewTurn += EventManager.DrawAndUpdateEvents;
+        OnStartNewTurn += EventManager.DrawCardAndUpdateEvents;
+        OnStartNewTurn += UpdateTurnCount;
     }
 
     public void StartNewGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (gameStarted)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        else
+            StartGame();
     }
 
     public void EndTurn()
@@ -87,8 +94,8 @@ public class GameManager : MonoBehaviour
             utilityManager = FindObjectOfType<UtilityManager>();
         if (eventManager == null)
             eventManager = FindObjectOfType<EventManager>();
-        if (handManager == null)
-            handManager = FindObjectOfType<HandManager>();
+        if (playFieldUIManager == null)
+            playFieldUIManager = FindObjectOfType<PlayFieldUIManager>();
         if (deckManager == null)
             deckManager = FindObjectOfType<DeckManager>();
         if (cardBuilder == null)
@@ -118,5 +125,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Lost the game.");
         //Do something here.
+    }
+
+    private void UpdateTurnCount()
+    {
+        currentTurnCount++;
+        playFieldUIManager.UpdateTurnCount(currentTurnCount);
     }
 }
