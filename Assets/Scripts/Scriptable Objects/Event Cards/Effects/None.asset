@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 800b7d0163d49a24b91337edc98d1303, type: 3}
-  m_Name: DestroyKatana
+  m_Name: None
   m_EditorClassIdentifier: 
-  effectType: 2
+  effectType: 0
   effectMagnitude: 0
-  effectTarget: 3
+  effectTarget: 0

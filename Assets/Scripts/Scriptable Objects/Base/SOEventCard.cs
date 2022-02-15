@@ -10,6 +10,8 @@ public class SOEventCard : SOCardBase
     [SerializeField] private int maxPlayNumber;
     [SerializeField] private EventCardType eventType;
     [SerializeField] private SOEventEffect eventEffect;
+    [SerializeField] private bool enactAtStart;
+    [SerializeField] private bool enactAtEnd;
 
     private int currentDangerPoints;
     private int currentPlayNumber;
@@ -30,10 +32,14 @@ public class SOEventCard : SOCardBase
     {
         currentDangerPoints = maxDangerPoints;
         currentPlayNumber = maxPlayNumber;
+
+        if (enactAtStart)
+            EventEffect.InitiateEffect();
     }
 
     public void OnEventEnded()
     {
-
+        if (enactAtEnd)
+            EventEffect.InitiateEffect();
     }
 }

@@ -32,8 +32,6 @@ public class CardBuilder : MonoBehaviour
             return;
         }
 
-        Debug.Log("Generating " + newCard.name + " for hand.");
-
         newCardUI.gameObject.SetActive(true);
         newCardUI.GetComponent<CardUIObject>().InitCardUI(newCard);
         newCard.CardUIOjbect = newCardUI;

@@ -8,8 +8,12 @@ public class EventManager : MonoBehaviour
     [SerializeField] private int eventDangerModifier = 0;
     [SerializeField] private int eventPlayCountModifier = 0;
 
-    [SerializeField] public bool hasGrapplingHook = false;
-    [SerializeField] private int grapplingHookEventDrawCount = 0;
+    public bool hasGrapplingHook = false;
+    private int grapplingHookEventDrawCount = 0;
+
+    public bool hasBrokenKatana = false;
+    private bool hasBrokenKatanaBuff = false;
+
     public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
@@ -32,28 +36,44 @@ public class EventManager : MonoBehaviour
         newEvent.OnEventStarted();
 
         UpdateEventStats();
-        grapplingHookEventDrawCount++;
 
-        if (hasGrapplingHook)
-            CheckDiscardEvent(newEvent);
+        if (hasGrapplingHook && newEvent.EventType != EventCardType.Clue)
+        {
+            grapplingHookEventDrawCount++;
+            GrapplingHookCheck(newEvent);
+        }
         //Need UI Update here.
     }
 
     public bool PlayUtilityOnEvent(SOUtilityCard utility, SOEventCard targetEvent)
     {
-        if (!CheckEventIsPlayable(targetEvent))
+        if (!CheckEventIsPlayable(targetEvent, utility))
             return false;
 
         //Need UI Update here.
 
-        targetEvent.UpdateDangerPoints(utility.UtilityPoints);
-
-        if (targetEvent.CurrentDangerPoints + eventDangerModifier <= 0)
+        if(targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && utility.EquipmentType != Equipment.None)
+        {
+            GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(utility);
             RemoveEvent(targetEvent);
+            
+            return true;
+        }
 
-        targetEvent.UpdatePlayCount(1);
-        UpdateEventStats();
-        return true;
+        else
+        {
+            targetEvent.UpdateDangerPoints(utility.UtilityPoints);
+
+            if (targetEvent.CurrentDangerPoints + eventDangerModifier <= 0)
+                RemoveEvent(targetEvent);
+
+            targetEvent.UpdatePlayCount(1);
+            UpdateEventStats();
+
+            GameManager.instance.UtilityManager.PlayUtilityCard(utility);
+            return true;
+
+        }
     }
 
     public void SenbonzakuraUtilityDiscard(int cardsToDiscard)
@@ -87,14 +107,17 @@ public class EventManager : MonoBehaviour
 
         foreach (SOEventCard eventCard in currentEventCards)
         {
+            int healthDamage = eventCard.CurrentDangerPoints + eventDangerModifier;
             if (!nullifyDamage)
-                GameManager.instance.UpdatePlayerHealth(-eventCard.CurrentDangerPoints + eventDangerModifier);
+                GameManager.instance.UpdatePlayerHealth(-healthDamage);
 
             eventsToRemove.Add(eventCard);
         }
 
         foreach (SOEventCard eventCard in eventsToRemove)
             RemoveEvent(eventCard);
+
+        BrokenKatanaReset();
     }
 
     public void RemoveClue(SOEventCard clueCard)
@@ -108,6 +131,7 @@ public class EventManager : MonoBehaviour
         currentEventCards = new List<SOEventCard>();
         SOUtilityEffect.OnStatsChanged += UpdateEventStats;
         GameManager.OnStartNewTurn += ResetGrapplingCount;
+        GameManager.OnStartNewTurn += BrokenKatanaCheck;
     }
 
     private IEnumerable<SOEventCard> DrawEventCard()
@@ -122,7 +146,7 @@ public class EventManager : MonoBehaviour
         currentEventCards.Remove(eventToRemove);
     }
 
-    private bool CheckEventIsPlayable(SOEventCard targetEvent)
+    private bool CheckEventIsPlayable(SOEventCard targetEvent, SOUtilityCard targetUtility)
     {
         if (!currentEventCards.Contains(targetEvent))
         {
@@ -130,12 +154,26 @@ public class EventManager : MonoBehaviour
             return false;
         }
 
+        if (targetUtility.IsMandatory)
+            return true;
+        
         if (targetEvent.CurrentPlayNumber + eventPlayCountModifier <= 0)
         {
             Debug.Log("Failed to update Event Card because the Max Play Number is: " + (targetEvent.MaxPlayNumber + eventPlayCountModifier)
                 + " and the Current Play Number is: " + targetEvent.CurrentPlayNumber);
             return false;
         }
+        
+        if (targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && targetUtility.UtilityType == UtilityType.Equipment &&
+            targetEvent.EventEffect.EffectTarget == targetUtility.EquipmentType)
+            return true;
+
+        if (targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && targetUtility.UtilityType == UtilityType.Equipment &&
+            targetEvent.EventEffect.EffectTarget == Equipment.Any)
+            return true;
+
+        if (targetUtility.UtilityType == UtilityType.Equipment)
+            return false;
 
         return true;
     }
@@ -154,7 +192,7 @@ public class EventManager : MonoBehaviour
         grapplingHookEventDrawCount = 0;
     }
 
-    private void CheckDiscardEvent(SOEventCard newEvent)
+    private void GrapplingHookCheck(SOEventCard newEvent)
     {
         if(hasGrapplingHook)
         {
@@ -162,5 +200,29 @@ public class EventManager : MonoBehaviour
                 GameManager.instance.PlayFieldUIManager.GrapplingHookEventCheck(
                     newEvent, newEvent.CurrentDangerPoints + eventDangerModifier, newEvent.CurrentPlayNumber + eventPlayCountModifier);
         }        
+    }
+
+    private void BrokenKatanaCheck()
+    {
+        if(hasBrokenKatana)
+        {
+            int rollChance = Random.Range(1, 11);
+
+            if (rollChance >= 6)
+            {
+                eventDangerModifier--;
+                hasBrokenKatanaBuff = true;
+            }
+        }
+
+    }
+
+    private void BrokenKatanaReset()
+    {
+        if (hasBrokenKatanaBuff)
+        {
+            eventDangerModifier++;
+            hasBrokenKatanaBuff = false;
+        }
     }
 }

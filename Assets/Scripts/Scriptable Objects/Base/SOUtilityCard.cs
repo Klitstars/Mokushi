@@ -6,21 +6,23 @@ using UnityEngine;
 public class SOUtilityCard : SOCardBase
 {
     [Header("Utility Attributes")]
-    [SerializeField] protected Utility utilityType;
+    [SerializeField] protected UtilityType utilityType;
     [SerializeField] protected Equipment equipmentType;
     [SerializeField] protected int utilityPoints;
 
     [Header("Card Effects")]
     [SerializeField] protected List<SOUtilityEffect> utilityEffects;
 
-    public Utility UtilityType { get => utilityType; }
+    public bool IsMandatory = false;
+
+    public UtilityType UtilityType { get => utilityType; }
     public Equipment EquipmentType { get => equipmentType; }
     public int UtilityPoints { get => utilityPoints; }
     public List<SOUtilityEffect> UtilityEffects { get => utilityEffects; }
 
     public void PlayUtilityCard()
     { 
-        if(utilityType == Utility.Equipment)
+        if(utilityType == UtilityType.Equipment)
         {
             UtilityManager.OnEquipItem += OnEquipEffect;
             UtilityManager.OnUnequipItem += OnUnequipEffect;

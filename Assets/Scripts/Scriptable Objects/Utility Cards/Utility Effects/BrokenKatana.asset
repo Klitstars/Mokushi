@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 800b7d0163d49a24b91337edc98d1303, type: 3}
-  m_Name: DestroyKatana
+  m_Script: {fileID: 11500000, guid: 7851b06991229d943942f23c1d584aca, type: 3}
+  m_Name: BrokenKatana
   m_EditorClassIdentifier: 
-  effectType: 2
+  effectType: 12
   effectMagnitude: 0
-  effectTarget: 3
+  effectDuration: 0

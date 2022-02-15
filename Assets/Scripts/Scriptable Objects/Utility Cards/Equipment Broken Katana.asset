@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
-  m_Name: Attribute Devoted
+  m_Name: Equipment Broken Katana
   m_EditorClassIdentifier: 
-  cardName: 'Attribute: Devoted'
-  cardDescription: 
+  cardName: 'Equipment: Broken Katana'
+  cardDescription: At the start of the turn, 50% chance to lower Danger Points by
+    1.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
-  utilityType: 3
-  equipmentType: 0
-  utilityPoints: 3
-  utilityEffects: []
+  utilityType: 1
+  equipmentType: 2
+  utilityPoints: 0
+  utilityEffects:
+  - {fileID: 11400000, guid: 0bcb28c0d1af7824a89a3b54ae613447, type: 2}
   IsMandatory: 0

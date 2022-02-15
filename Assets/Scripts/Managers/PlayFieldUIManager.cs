@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlayFieldUIManager : MonoBehaviour
@@ -8,8 +9,10 @@ public class PlayFieldUIManager : MonoBehaviour
     [SerializeField] private TMP_Text playerHealthText;
     [SerializeField] private TMP_Text turnCountText;
     [SerializeField] private TMP_Text clueCountText;
+    [SerializeField] private TMP_Text resultsText;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject grapplingHookPanel;
+    [SerializeField] private Button endTurnButton;
     [SerializeField] private CardUIObject equipmentSlot;
     [SerializeField] private CardUIObject discardEventCard;
 
@@ -53,7 +56,7 @@ public class PlayFieldUIManager : MonoBehaviour
         if (card == null)
             return;
 
-        Debug.Log("Adding " + card.name + " to hand.");
+
         hand.Add(card);
         GameManager.instance.CardBuilder.GenerateCard(card, UtilityPosition.Hand);
     }
@@ -98,11 +101,15 @@ public class PlayFieldUIManager : MonoBehaviour
     public void GameOver(bool win)
     {
         gameOverPanel.SetActive(true);
+
+        if (win)
+            resultsText.text = "You found all four clues!";
+        if(!win)
+            resultsText.text = "You failed to find all four clues!";
     }
 
     public void GrapplingHookEventCheck(SOEventCard newEvent, int dangerPoints, int playCount)
     {
-        Debug.Log("Grappling hook check.");
         if (grapplingHookDiscardEvent != null)
             grapplingHookDiscardEvent = null;
 
@@ -114,6 +121,12 @@ public class PlayFieldUIManager : MonoBehaviour
     public void GrapplingHookEventDiscard()
     {
         GameManager.instance.EventManager.GrapplingHookUtilityDiscard(grapplingHookDiscardEvent);
+    }
+
+    public void CanEndTurn(bool canEndTurn)
+    {
+        endTurnButton.interactable = canEndTurn;
+        GameManager.instance.CardPlayController.mandatoryCardInPlay = !canEndTurn;
     }
 
     private void Start()

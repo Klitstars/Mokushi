@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     public bool keepCurrentEvent = false;
     public bool nullifyDamage = true;
-    public bool canEndTurn = true;
+    [SerializeField] private int canEndTurn = 0;
 
     public UtilityManager UtilityManager { get => utilityManager; }
     public EventManager EventManager { get => eventManager; }
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateDrawModifier(int amountToModify) => utilityDrawModifier += amountToModify;
     public void UpdateDamageModifier(int amountToModify) => damageModifier += damageModifier;
+
     public void UpdatePlayerHealth(int amountToModify)
     {
         currentHealth += amountToModify;
@@ -57,24 +58,33 @@ public class GameManager : MonoBehaviour
             PlayFieldUIManager.GameOver(true);
     }
 
-    [ContextMenu("StartGame")]
+    public void CanEndTurn(int endTurn)
+    {
+        canEndTurn += endTurn;
+
+        if (canEndTurn < 0)
+            PlayFieldUIManager.CanEndTurn(false);
+        if (canEndTurn >= 0)
+        {
+            PlayFieldUIManager.CanEndTurn(true);
+        }
+            
+    }
+
     public void StartGame()
     {
-        utilityManager.DrawCards(7);
         eventManager.DrawCardAndUpdateEvents();
+        utilityManager.DrawCards(7);
         playFieldUIManager.UpdatePlayerHealth(currentHealth);
 
-        OnStartNewTurn += UtilityManager.DrawCard;
         OnStartNewTurn += EventManager.DrawCardAndUpdateEvents;
+        OnStartNewTurn += UtilityManager.DrawCard;
         OnStartNewTurn += UpdateTurnCount;
     }
 
     public void StartNewGame()
     {
-        if (gameStarted)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        else
-            StartGame();
+        SceneManager.LoadScene(0);
     }
 
     public void EndTurn()

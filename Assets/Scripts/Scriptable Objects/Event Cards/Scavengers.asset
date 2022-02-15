@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b0de2326b1f7b14d818b36c9a4b9486, type: 3}
-  m_Name: RogueNinjas
+  m_Name: Scavengers
   m_EditorClassIdentifier: 
-  cardName: Rogue Ninjas
-  cardDescription: A band of rogue ninjas appear. Destroy katana if it is equipped.
+  cardName: Scavengers
+  cardDescription: Scavengers appear. You may pay equipment to end this event.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 1
-  maxDangerPoints: 0
-  maxPlayNumber: 0
+  maxDangerPoints: 4
+  maxPlayNumber: 2
   eventType: 1
-  eventEffect: {fileID: 11400000, guid: b46bd4a0aecea6347aa1901ad81540d8, type: 2}
+  eventEffect: {fileID: 11400000, guid: 1b47fc7755d6a624587c87d42cdff68d, type: 2}
+  enactAtStart: 0
+  enactAtEnd: 0

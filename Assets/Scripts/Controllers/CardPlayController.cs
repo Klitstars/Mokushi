@@ -7,6 +7,7 @@ public class CardPlayController : MonoBehaviour
     private SOEventCard currentEvent;
     private SOUtilityCard currentUtility;
     public bool equipmentSlotSelected = false;
+    public bool mandatoryCardInPlay = false;
 
     public void UpdateSelectedEvent(SOEventCard card)
     {
@@ -28,7 +29,9 @@ public class CardPlayController : MonoBehaviour
         if (currentEvent.EventType == EventCardType.Clue)
         {
             GameManager.instance.EventManager.RemoveClue(card);
+            GameManager.instance.EventManager.DrawCardAndUpdateEvents();
             currentEvent = null;
+            return;
         }
 
         PlayCards();
@@ -39,7 +42,10 @@ public class CardPlayController : MonoBehaviour
         if(currentUtility != null)
             currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
 
-        if(currentUtility == card)
+        if (mandatoryCardInPlay && !card.IsMandatory)
+            return;
+
+        if (currentUtility == card)
         {
             currentUtility = null;
             return;
@@ -53,10 +59,27 @@ public class CardPlayController : MonoBehaviour
 
     public void SelectEquipmentSlot()
     {
-        if(equipmentSlotSelected)
+        if (mandatoryCardInPlay)
+            return;
+
+        if (currentUtility == null && GameManager.instance.UtilityManager.CurrentEquipment != null)
+        {
+            GameManager.instance.UtilityManager.Unequip();
+            GameManager.instance.PlayFieldUIManager.NullifyEquipment();
+            equipmentSlotSelected = false;
+            GameManager.instance.PlayFieldUIManager.SelectEquipmentSlot(equipmentSlotSelected);
+
+            return;
+        }
+
+        if (currentUtility == null && GameManager.instance.UtilityManager.CurrentEquipment == null)
+            return;
+
+        if (equipmentSlotSelected)
         {
             equipmentSlotSelected = false;
             GameManager.instance.PlayFieldUIManager.SelectEquipmentSlot(equipmentSlotSelected);
+            
             return;
         }
 
@@ -77,29 +100,35 @@ public class CardPlayController : MonoBehaviour
         if (currentUtility == null)
             return;
 
-        if(currentUtility.EquipmentType == Equipment.None && currentEvent != null && currentEvent.EventType != EventCardType.Clue)
-        {
-            if (GameManager.instance.EventManager.PlayUtilityOnEvent(currentUtility, currentEvent))
-                GameManager.instance.UtilityManager.PlayUtilityCard(currentUtility);
-
-            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
-            currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
-
-            currentUtility = null;
-            currentEvent = null;
-            return;
-        }
-
-        if(currentUtility.EquipmentType != Equipment.None && equipmentSlotSelected)
+        if (currentUtility.EquipmentType != Equipment.None && equipmentSlotSelected)
         {
             GameManager.instance.PlayFieldUIManager.UpdateEquippedUtility(currentUtility);
             GameManager.instance.UtilityManager.PlayUtilityCard(currentUtility);
 
+            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
             currentUtility = null;
+
             equipmentSlotSelected = false;
             GameManager.instance.PlayFieldUIManager.SelectEquipmentSlot(equipmentSlotSelected);
 
             return;
         }
+
+        if (currentEvent != null)
+        {
+            if (GameManager.instance.EventManager.PlayUtilityOnEvent(currentUtility, currentEvent))
+            {
+                currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+                currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+
+            }
+
+            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentUtility = null;
+
+            currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentEvent = null;
+        }
+
     }
 }

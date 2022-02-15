@@ -20,4 +20,6 @@ MonoBehaviour:
   maxDangerPoints: 0
   maxPlayNumber: 0
   eventType: 2
-  eventEffect: {fileID: 0}
+  eventEffect: {fileID: 11400000, guid: 85ad838208a20e44c92e164759dbae78, type: 2}
+  enactAtStart: 0
+  enactAtEnd: 0

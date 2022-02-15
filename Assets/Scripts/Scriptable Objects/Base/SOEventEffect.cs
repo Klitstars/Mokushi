@@ -10,6 +10,8 @@ public class SOEventEffect : SOEventEffectBase
     [SerializeField] private int effectMagnitude;
     [SerializeField] private Equipment effectTarget;
 
+    public EventEffectTypes EffectType { get => effectType; }
+    public Equipment EffectTarget { get => effectTarget; }
 
     public void InitiateEffect()
     {
@@ -63,9 +65,13 @@ public class SOEventEffect : SOEventEffectBase
     private void DestroyEquippedItem(Equipment effectTarget)
     {
         if (effectTarget == Equipment.None)
-            GameManager.instance.UtilityManager.RemoveEquipment();
-        else if (GameManager.instance.UtilityManager.EquippedUtility.EquipmentType != effectTarget)
-            GameManager.instance.UtilityManager.RemoveEquipment();
+            GameManager.instance.UtilityManager.DestroyEquippedItem();
+        
+        if (GameManager.instance.UtilityManager.CurrentEquipment != null && GameManager.instance.UtilityManager.CurrentEquipment.EquipmentType == effectTarget)
+        {
+            GameManager.instance.UtilityManager.DestroyEquippedItem();
+            Debug.Log("Destroying Equipment");
+        }
     }
 
     private void PayItemToEvent(Equipment effectTarget)

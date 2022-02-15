@@ -31,8 +31,6 @@ public class CardUIObject : MonoBehaviour
 
     public void InitCardUI(SOUtilityCard newCard)
     {
-        Debug.Log("Initializing " + newCard.name + " for hand.");
-
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
         cardName.text = newCard.CardName;
@@ -41,7 +39,6 @@ public class CardUIObject : MonoBehaviour
         dangerPointsText.text = newCard.UtilityPoints.ToString();
         playCountText.text = "";
         playCountPointsText.text = "";
-
 
         utilityCardData = newCard;
         newCard.CardUIOjbect = this.gameObject;
@@ -87,6 +84,14 @@ public class CardUIObject : MonoBehaviour
         cardDescription.text = newCard.CardDescription;
         dangerPointsText.text = dangerPoints.ToString();
         playCountPointsText.text = playCount.ToString();
+
+        if (newCard.EventType == EventCardType.Clue)
+        {
+            dangerText.text = "";
+            dangerPointsText.text = "";
+            playCountText.text = "";
+            playCountPointsText.text = "";
+        }
 
         eventCardData = newCard;
     }
@@ -142,6 +147,9 @@ public class CardUIObject : MonoBehaviour
 
     private void Highlight()
     {
+        if (utilityCardData == null)
+            return;
+
         if (isPickedUp && !isHighlighted)
         {
             highlightImage.color = new Color(highlightImage.color.r, highlightImage.color.g, highlightImage.color.b, 255);
@@ -153,5 +161,8 @@ public class CardUIObject : MonoBehaviour
             highlightImage.color = new Color(highlightImage.color.r, highlightImage.color.g, highlightImage.color.b, 0);
             isHighlighted = false;
         }
+
+        if (utilityCardData.IsMandatory && highlightImage.color != Color.red)
+            highlightImage.color = Color.red;
     }
 }

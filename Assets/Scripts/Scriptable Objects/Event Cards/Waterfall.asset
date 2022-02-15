@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: Waterfall
   m_EditorClassIdentifier: 
   cardName: Waterfall
-  cardDescription: A waterfall blocks your path.
+  cardDescription: A waterfall blocks your path. (3 Danger Points, 3 Play Count)
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 1
   maxDangerPoints: 3
   maxPlayNumber: 3
   eventType: 1
-  eventEffect: {fileID: 0}
+  eventEffect: {fileID: 11400000, guid: 85ad838208a20e44c92e164759dbae78, type: 2}
+  enactAtStart: 0
+  enactAtEnd: 0

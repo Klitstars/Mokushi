@@ -10,14 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
-  m_Name: INCOMPLETE 2
+  m_Name: Attribute Resentful
   m_EditorClassIdentifier: 
   cardName: 'Attribute: Resentful'
-  cardDescription: This card must be played this turn.
+  cardDescription: Danger Points +1. This card must be played this turn.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
   utilityType: 3
+  equipmentType: 0
   utilityPoints: 0
   utilityEffects:
   - {fileID: 11400000, guid: 72302b2249dc5e34c96a09c6d8a71290, type: 2}
+  - {fileID: 11400000, guid: c4646cc8b5b3b3740951dd2f05797e3b, type: 2}
+  IsMandatory: 1

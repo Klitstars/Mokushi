@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Official Scenes (Do Not Edit)/Interim Scene.unity
+    guid: 4612715f8f4a23142b5ef86cff61d3db
+  - enabled: 1
+    path: Assets/Scenes/Official Scenes (Do Not Edit)/Test Game Scene.unity
+    guid: e786235ac0e17b241a7c9b95aa65d3c3
   m_configObjects: {}

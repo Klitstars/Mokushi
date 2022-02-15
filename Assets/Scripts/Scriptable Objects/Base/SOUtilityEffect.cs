@@ -16,6 +16,8 @@ public class SOUtilityEffect : ScriptableObject
     public delegate void onStatsChanged();
     public static event onStatsChanged OnStatsChanged;
 
+    public UtilityEffectTypes EffectType { get => effectType; }
+
     private int currentDurationTimer = 0;
 
     public void InitiateEffect()
@@ -28,7 +30,6 @@ public class SOUtilityEffect : ScriptableObject
 
     public void CancelEffects()
     {
-        Debug.Log("Cancelling effects");
         DetermineCancelation(-effectMagnitude);
     }
 
@@ -70,7 +71,7 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.MandatoryPlay:
-                MandatoryPlay();
+                MandatoryPlay(1);
                 return;
 
             case UtilityEffectTypes.CycleEventDraw:
@@ -83,6 +84,9 @@ public class SOUtilityEffect : ScriptableObject
 
             case UtilityEffectTypes.EventDrawModifier:
                 EventDrawModifier(effectMagnitude);
+                return;
+            case UtilityEffectTypes.BrokenKatana:
+                BrokenKatana(true);
                 return;
         }
     }
@@ -116,7 +120,6 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.MandatoryPlay:
-                MandatoryPlay();
                 return;
 
             case UtilityEffectTypes.CycleEventDraw:
@@ -124,9 +127,15 @@ public class SOUtilityEffect : ScriptableObject
                 return;
 
             case UtilityEffectTypes.UtilityDrawModifier:
+                UtilityDrawModifier(effectMagnitude);
                 return;
 
             case UtilityEffectTypes.EventDrawModifier:
+                EventDrawModifier(effectMagnitude);
+                return;
+
+            case UtilityEffectTypes.BrokenKatana:
+                BrokenKatana(false);
                 return;
         }
     }
@@ -185,9 +194,9 @@ public class SOUtilityEffect : ScriptableObject
         GameManager.instance.EventManager.hasGrapplingHook = hasGrapplingHook;
     }
 
-    private void MandatoryPlay()
+    private void MandatoryPlay(int modifier)
     {
-        //UI component that disallows ending the turn until this card is played.
+        GameManager.instance.CanEndTurn(modifier);
     }
 
     private void ModifyDamageTaken(int effectMagnitude)
@@ -203,5 +212,10 @@ public class SOUtilityEffect : ScriptableObject
     private void EventDrawModifier(int effectMagnitude)
     {
         GameManager.instance.UpdateDrawModifier(effectMagnitude);
+    }
+
+    private void BrokenKatana(bool hasBrokenKatana)
+    {
+        GameManager.instance.EventManager.hasBrokenKatana = hasBrokenKatana;
     }
 }

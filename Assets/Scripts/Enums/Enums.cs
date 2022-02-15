@@ -3,7 +3,7 @@
     Utility,
     Event
 }
-public enum Utility
+public enum UtilityType
 {
     None,
     Equipment,
@@ -25,6 +25,7 @@ public enum UtilityEffectTypes
     DamageTakenModifier,
     MandatoryPlay,
     CycleEventDraw,
+    BrokenKatana
 }
 
 public enum EventEffectTypes
@@ -39,6 +40,7 @@ public enum EventEffectTypes
 public enum Equipment
 {
     None,
+    Any,
     BrokenKatana,
     Katana,
     Shurikens,

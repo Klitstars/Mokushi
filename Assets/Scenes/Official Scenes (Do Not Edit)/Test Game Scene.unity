@@ -214,7 +214,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start New Game
+  m_text: Draw
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29
+  m_fontSize: 58.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1507,8 +1507,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 143.36829}
-  m_SizeDelta: {x: 1373.8523, y: 286.73657}
+  m_AnchoredPosition: {x: 0, y: 175.6}
+  m_SizeDelta: {x: 1373.8523, y: 351.1067}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &938999602
 MonoBehaviour:
@@ -1982,7 +1982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 60}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1174875161
@@ -2021,8 +2021,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -151.63063}
-  m_SizeDelta: {x: 1108.1875, y: 303.26126}
+  m_AnchoredPosition: {x: 0, y: -173.6}
+  m_SizeDelta: {x: 1108.1875, y: 347.17044}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1174875163
 MonoBehaviour:
@@ -2845,7 +2845,7 @@ GameObject:
   - component: {fileID: 1624282655}
   - component: {fileID: 1624282654}
   m_Layer: 5
-  m_Name: Start New Game
+  m_Name: Draw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2917,6 +2917,17 @@ MonoBehaviour:
       - m_Target: {fileID: 1791765014}
         m_MethodName: StartGame
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1624282652}
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3117,7 +3128,7 @@ PrefabInstance:
     - target: {fileID: 5482899284362481750, guid: 0b352ef1305223944beb751fbd854494,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -29
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5482899284362481750, guid: 0b352ef1305223944beb751fbd854494,
         type: 3}
@@ -3590,7 +3601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 642700288}
   handPosition: {fileID: 941078211}
-  equipmentPosition: {fileID: 0}
+  equipmentPosition: {fileID: 2004199795}
   eventPosition: {fileID: 987992763}
 --- !u!114 &1901876930 stripped
 MonoBehaviour:
@@ -4036,6 +4047,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1691593129133734753, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
+        type: 3}
+      propertyPath: canEndTurn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1691593129133734754, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
         type: 3}
       propertyPath: m_Name
@@ -4043,9 +4059,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1691593129133734767, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
         type: 3}
+      propertyPath: resultsText
+      value: 
+      objectReference: {fileID: 916094662}
+    - target: {fileID: 1691593129133734767, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
+        type: 3}
       propertyPath: clueCountText
       value: 
       objectReference: {fileID: 1430247410}
+    - target: {fileID: 1691593129133734767, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
+        type: 3}
+      propertyPath: endTurnButton
+      value: 
+      objectReference: {fileID: 271097875}
     - target: {fileID: 1691593129133734767, guid: 56f4019df96f8fd4ebceee6d1f2f4cd8,
         type: 3}
       propertyPath: equipmentSlot
@@ -4140,6 +4166,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4100328201477451649, guid: a3a4b2722eb875c408966d931b9c4894,
+        type: 3}
+      propertyPath: mandatoryCardInPlay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4100328201477451662, guid: a3a4b2722eb875c408966d931b9c4894,
         type: 3}
       propertyPath: m_Name
@@ -4162,48 +4193,25 @@ PrefabInstance:
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
       propertyPath: eventDeck.cardDeck.Array.size
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
-        type: 3}
-      propertyPath: eventDeck.cardDeck.Array.data[6]
+      propertyPath: eventDeck.cardDeck.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 8a8e348667606f741a82604f94a10e0d,
+      objectReference: {fileID: 11400000, guid: aced513ee23fc724681d6a4576324568,
         type: 2}
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.data[4]
+      propertyPath: eventDeck.cardDeck.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 70e9086be8c483848bf70caa5e113461,
+      objectReference: {fileID: 11400000, guid: aced513ee23fc724681d6a4576324568,
         type: 2}
     - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.data[5]
+      propertyPath: eventDeck.cardDeck.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: fedda5b12e0bb5a4cb4185927093acc0,
-        type: 2}
-    - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
-        type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.data[6]
-      value: 
-      objectReference: {fileID: 11400000, guid: 78755d4bf09305146a74ae4c7df7eeed,
-        type: 2}
-    - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
-        type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.data[7]
-      value: 
-      objectReference: {fileID: 11400000, guid: 5c2877436d41347428778e92af6371ef,
-        type: 2}
-    - target: {fileID: 4838364890414535630, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
-        type: 3}
-      propertyPath: utilityDeck.cardDeck.Array.data[8]
-      value: 
-      objectReference: {fileID: 11400000, guid: 274cbee0fc4725f42bf15b92ae8d6ab3,
+      objectReference: {fileID: 11400000, guid: aced513ee23fc724681d6a4576324568,
         type: 2}
     - target: {fileID: 4838364890414535631, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}

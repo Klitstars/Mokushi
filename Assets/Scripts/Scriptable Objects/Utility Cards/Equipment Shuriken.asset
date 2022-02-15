@@ -18,7 +18,8 @@ MonoBehaviour:
   cardBackground: {fileID: 0}
   cardType: 0
   utilityType: 1
-  equipmentType: 3
+  equipmentType: 4
   utilityPoints: 0
   utilityEffects:
   - {fileID: 11400000, guid: ab7e234177f181f41b9a687ba8896d45, type: 2}
+  IsMandatory: 0
