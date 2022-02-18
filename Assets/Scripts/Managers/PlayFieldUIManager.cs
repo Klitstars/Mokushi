@@ -13,8 +13,8 @@ public class PlayFieldUIManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject grapplingHookPanel;
     [SerializeField] private Button endTurnButton;
-    [SerializeField] private CardUIObject equipmentSlot;
-    [SerializeField] private CardUIObject discardEventCard;
+    [SerializeField] private CardUI equipmentSlot;
+    [SerializeField] private CardUI discardEventCard;
 
     private List<SOUtilityCard> hand;
     private SOEventCard grapplingHookDiscardEvent;
@@ -90,7 +90,7 @@ public class PlayFieldUIManager : MonoBehaviour
 
     public void UpdateEventCardUI(SOEventCard card, int dangerPoints, int playCount)
     {
-        card.CardUIOjbect.GetComponent<CardUIObject>().UpdateCardUI(card, dangerPoints, playCount);
+        card.CardUIOjbect.GetComponent<CardUI>().UpdateCardUI(card, dangerPoints, playCount);
     }
 
     public void NullifyEquipment()

@@ -3,6 +3,8 @@
     Utility,
     Event
 }
+
+
 public enum UtilityType
 {
     None,

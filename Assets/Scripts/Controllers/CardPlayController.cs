@@ -15,7 +15,7 @@ public class CardPlayController : MonoBehaviour
             equipmentSlotSelected = false;
 
         if(currentEvent != null)
-            currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentEvent.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
 
         if (currentEvent == card)
         {
@@ -24,7 +24,7 @@ public class CardPlayController : MonoBehaviour
         }
 
         currentEvent = card;
-        card.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = true;
+        card.CardUIOjbect.GetComponent<CardUI>().isPickedUp = true;
 
         if (currentEvent.EventType == EventCardType.Clue)
         {
@@ -40,7 +40,7 @@ public class CardPlayController : MonoBehaviour
     public void UpdateSelectedUtility(SOUtilityCard card)
     {
         if(currentUtility != null)
-            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentUtility.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
 
         if (mandatoryCardInPlay && !card.IsMandatory)
             return;
@@ -52,7 +52,7 @@ public class CardPlayController : MonoBehaviour
         }
 
         currentUtility = card;
-        card.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = true;
+        card.CardUIOjbect.GetComponent<CardUI>().isPickedUp = true;
 
         PlayCards();
     }
@@ -88,7 +88,7 @@ public class CardPlayController : MonoBehaviour
 
         if(currentEvent != null)
         {
-            currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentEvent.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
             currentEvent = null;
         }
 
@@ -105,7 +105,7 @@ public class CardPlayController : MonoBehaviour
             GameManager.instance.PlayFieldUIManager.UpdateEquippedUtility(currentUtility);
             GameManager.instance.UtilityManager.PlayUtilityCard(currentUtility);
 
-            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentUtility.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
             currentUtility = null;
 
             equipmentSlotSelected = false;
@@ -118,15 +118,15 @@ public class CardPlayController : MonoBehaviour
         {
             if (GameManager.instance.EventManager.PlayUtilityOnEvent(currentUtility, currentEvent))
             {
-                currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
-                currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+                currentUtility.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
+                currentEvent.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
 
             }
 
-            currentUtility.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentUtility.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
             currentUtility = null;
 
-            currentEvent.CardUIOjbect.GetComponent<CardUIObject>().isPickedUp = false;
+            currentEvent.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
             currentEvent = null;
         }
 

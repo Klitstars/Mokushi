@@ -33,7 +33,7 @@ public class CardBuilder : MonoBehaviour
         }
 
         newCardUI.gameObject.SetActive(true);
-        newCardUI.GetComponent<CardUIObject>().InitCardUI(newCard);
+        newCardUI.GetComponent<CardUI>().InitCardUI(newCard);
         newCard.CardUIOjbect = newCardUI;
     }
 
@@ -43,7 +43,7 @@ public class CardBuilder : MonoBehaviour
         newCardUI = Instantiate(cardPrefab, eventPosition.transform);
 
         newCardUI.gameObject.SetActive(true);
-        newCardUI.GetComponent<CardUIObject>().InitCardUI(newCard);
+        newCardUI.GetComponent<CardUI>().InitCardUI(newCard);
         newCard.CardUIOjbect = newCardUI;
 
 

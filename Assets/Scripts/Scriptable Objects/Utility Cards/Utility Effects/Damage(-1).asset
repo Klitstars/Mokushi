@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7851b06991229d943942f23c1d584aca, type: 3}
   m_Name: Damage(-1)
   m_EditorClassIdentifier: 
-  effectType: 0
+  effectType: 9
   effectMagnitude: 1
-  effectTarget: 0
   effectDuration: 1
