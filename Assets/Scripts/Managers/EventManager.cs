@@ -34,7 +34,6 @@ public class EventManager : MonoBehaviour
         GameManager.instance.CardBuilder.GenerateCard(newEvent);
         currentEventCards.Add(newEvent);
 
-        UpdateEventStats();
         newEvent.OnEventStarted();
 
         if (hasGrapplingHook && newEvent.EventType != EventCardType.Clue)
@@ -43,7 +42,7 @@ public class EventManager : MonoBehaviour
             GrapplingHookCheck(newEvent);
         }
 
-
+        UpdateEventStats();
         //Need UI Update here.
     }
 
