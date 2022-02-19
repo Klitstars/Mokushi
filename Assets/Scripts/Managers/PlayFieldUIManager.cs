@@ -16,8 +16,8 @@ public class PlayFieldUIManager : MonoBehaviour
     [SerializeField] private CardUI equipmentSlot;
     [SerializeField] private CardUI discardEventCard;
 
-    private List<SOUtilityCard> hand;
-    private SOEventCard grapplingHookDiscardEvent;
+    private List<CardData> hand;
+    private CardData grapplingHookDiscardEvent;
 
     public void UpdatePlayerHealth(int currentHealth)
     {
@@ -43,15 +43,15 @@ public class PlayFieldUIManager : MonoBehaviour
         return discardedCardCount;
     }
 
-    public void AddCardsToHand(IEnumerable<SOUtilityCard> cards)
+    public void AddCardsToHand(IEnumerable<CardData> cards)
     {
-        foreach(SOUtilityCard card in cards)
+        foreach(CardData card in cards)
         {
             AddCardToHand(card);
         }
     }
 
-    public void AddCardToHand(SOUtilityCard card)
+    public void AddCardToHand(CardData card)
     {
         if (card == null)
             return;
@@ -61,15 +61,15 @@ public class PlayFieldUIManager : MonoBehaviour
         GameManager.instance.CardBuilder.GenerateCard(card, UtilityPosition.Hand);
     }
 
-    public void RemoveCardFromHand(IEnumerable<SOUtilityCard> cards)
+    public void RemoveCardFromHand(IEnumerable<CardData> cards)
     {
-        foreach (SOUtilityCard card in cards)
+        foreach (CardData card in cards)
         {
             RemoveCardFromHand(card);
         }
     }
 
-    public void RemoveCardFromHand(SOUtilityCard card)
+    public void RemoveCardFromHand(CardData card)
     {
         if (card == null || !hand.Contains(card))
             return;
@@ -78,7 +78,7 @@ public class PlayFieldUIManager : MonoBehaviour
         hand.Remove(card);
     }
 
-    public void UpdateEquippedUtility(SOUtilityCard newEquip)
+    public void UpdateEquippedUtility(CardData newEquip)
     {
         equipmentSlot.UpdateEquipmentUI(newEquip);
     }
@@ -88,7 +88,7 @@ public class PlayFieldUIManager : MonoBehaviour
         equipmentSlot.isPickedUp = isSelected;
     }
 
-    public void UpdateEventCardUI(SOEventCard card, int dangerPoints, int playCount)
+    public void UpdateEventCardUI(CardData card, int dangerPoints, int playCount)
     {
         card.CardUIOjbect.GetComponent<CardUI>().UpdateCardUI(card, dangerPoints, playCount);
     }
@@ -108,7 +108,7 @@ public class PlayFieldUIManager : MonoBehaviour
             resultsText.text = "You failed to find all four clues!";
     }
 
-    public void GrapplingHookEventCheck(SOEventCard newEvent, int dangerPoints, int playCount)
+    public void GrapplingHookEventCheck(CardData newEvent, int dangerPoints, int playCount)
     {
         if (grapplingHookDiscardEvent != null)
             grapplingHookDiscardEvent = null;
@@ -131,6 +131,6 @@ public class PlayFieldUIManager : MonoBehaviour
 
     private void Start()
     {
-        hand = new List<SOUtilityCard>();
+        hand = new List<CardData>();
     }
 }

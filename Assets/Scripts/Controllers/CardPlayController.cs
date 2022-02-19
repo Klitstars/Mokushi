@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CardPlayController : MonoBehaviour
 {
-    private SOEventCard currentEvent;
-    private SOUtilityCard currentUtility;
+    private CardData currentEvent;
+    private CardData currentUtility;
     public bool equipmentSlotSelected = false;
     public bool mandatoryCardInPlay = false;
 
-    public void UpdateSelectedEvent(SOEventCard card)
+    public void UpdateSelectedEvent(CardData card)
     {
         if (equipmentSlotSelected)
             equipmentSlotSelected = false;
@@ -37,7 +37,7 @@ public class CardPlayController : MonoBehaviour
         PlayCards();
     }
 
-    public void UpdateSelectedUtility(SOUtilityCard card)
+    public void UpdateSelectedUtility(CardData card)
     {
         if(currentUtility != null)
             currentUtility.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;

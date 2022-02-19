@@ -32,8 +32,12 @@ public class EditorCardGUI : Editor
 
         EditorGUILayout.Space();
 
+        SerializedProperty UtilityTypeProperty = serializedObject.FindProperty("utilityType");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("utilityType"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("equipmentType"));
+
+        if(UtilityTypeProperty.intValue != 0)
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("equipmentType"));
+        
         EditorGUILayout.PropertyField(serializedObject.FindProperty("utilityPoints"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("isMandatory"));
     }

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class UtilityManager : MonoBehaviour
 {
-    [SerializeField] private SOUtilityCard currentEquipment;
+    [SerializeField] private CardData currentEquipment;
 
     public delegate void onEquipItem();
     public static event onEquipItem OnEquipItem;
     public delegate void onUnequipItem();
     public static event onEquipItem OnUnequipItem;
 
-    public SOUtilityCard CurrentEquipment { get => currentEquipment; }
+    public CardData CurrentEquipment { get => currentEquipment; }
 
     public void DrawCard()
     {
-        SOUtilityCard newCard = GameManager.instance.DeckManager.DrawRandomUtilityCard();
+        CardData newCard = GameManager.instance.DeckManager.DrawRandomUtilityCard();
 
         if (newCard == null)
             return;
@@ -36,7 +36,7 @@ public class UtilityManager : MonoBehaviour
             DrawCard();
     }
 
-    public void PlayUtilityCard(SOUtilityCard newUtility)
+    public void PlayUtilityCard(CardData newUtility)
     {
         if (newUtility.UtilityType == UtilityType.Equipment)
         {
@@ -47,7 +47,7 @@ public class UtilityManager : MonoBehaviour
 
         newUtility.PlayUtilityCard();
         GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(newUtility);
-        GameManager.instance.DeckManager.AddCard(newUtility);
+        GameManager.instance.DeckManager.AddCardToUtilityDeck(newUtility);
     }
 
     public void Unequip()
@@ -74,7 +74,7 @@ public class UtilityManager : MonoBehaviour
         currentEquipment = null;
     }
 
-    private void Equip(SOUtilityCard newEquipment)
+    private void Equip(CardData newEquipment)
     {
         Unequip();
 

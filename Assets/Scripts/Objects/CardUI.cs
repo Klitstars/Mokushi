@@ -19,17 +19,17 @@ public class CardUI : MonoBehaviour
     [SerializeField] private Transform homePoint;
     [SerializeField] private float lerpSpeed;
 
-    private SOUtilityCard utilityCardData;
-    private SOEventCard eventCardData;
+    private CardData utilityCardData;
+    private CardData eventCardData;
     private bool isHighlighted = false;
 
     public bool isPickedUp = false;
 
-    public SOUtilityCard UtilityCardData { get => utilityCardData; }
-    public SOEventCard EventCardData { get => eventCardData; }
+    public CardData UtilityCardData { get => utilityCardData; }
+    public CardData EventCardData { get => eventCardData; }
 
 
-    public void InitCardUI(SOUtilityCard newCard)
+    public void InitUtilityCardUI(CardData newCard)
     {
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
@@ -44,7 +44,7 @@ public class CardUI : MonoBehaviour
         newCard.CardUIOjbect = this.gameObject;
     }
 
-    public void UpdateEquipmentUI(SOUtilityCard newCard)
+    public void UpdateEquipmentUI(CardData newCard)
     {
         cardBackground.sprite = newCard.CardBackground;
         cardForeground.sprite = newCard.CardForeground;
@@ -73,7 +73,7 @@ public class CardUI : MonoBehaviour
         utilityCardData = null;
     }
 
-    public void UpdateCardUI(SOEventCard newCard, int dangerPoints, int playCount)
+    public void UpdateCardUI(CardData newCard, int dangerPoints, int playCount)
     {
         if (newCard == null)
             return;
@@ -96,7 +96,7 @@ public class CardUI : MonoBehaviour
         eventCardData = newCard;
     }
 
-    public void InitCardUI(SOEventCard newCard)
+    public void InitEventCardUI(CardData newCard)
     {
         if (newCard == null)
             return; 

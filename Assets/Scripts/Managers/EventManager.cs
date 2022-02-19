@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    [SerializeField] private List<SOEventCard> currentEventCards;
+    [SerializeField] private List<CardData> currentEventCards;
     [SerializeField] private int eventDangerModifier = 0;
     [SerializeField] private int eventPlayCountModifier = 0;
 
@@ -14,7 +14,7 @@ public class EventManager : MonoBehaviour
     public bool hasBrokenKatana = false;
     private bool hasBrokenKatanaBuff = false;
 
-    public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
+    public List<CardData> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
     
@@ -26,7 +26,7 @@ public class EventManager : MonoBehaviour
 
     public void DrawCardAndUpdateEvents()
     {
-        SOEventCard newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
+        CardData newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
 
         if (newEvent == null)
             return;
@@ -34,7 +34,6 @@ public class EventManager : MonoBehaviour
         GameManager.instance.CardBuilder.GenerateCard(newEvent);
         currentEventCards.Add(newEvent);
 
-        newEvent.OnEventStarted();
 
         if (hasGrapplingHook && newEvent.EventType != EventCardType.Clue)
         {
@@ -42,11 +41,12 @@ public class EventManager : MonoBehaviour
             GrapplingHookCheck(newEvent);
         }
 
+        newEvent.OnEventStarted();
         UpdateEventStats();
         //Need UI Update here.
     }
 
-    public bool PlayUtilityOnEvent(SOUtilityCard utility, SOEventCard targetEvent)
+    public bool PlayUtilityOnEvent(CardData utility, CardData targetEvent)
     {
         if (!CheckEventIsPlayable(targetEvent, utility))
             return false;
@@ -80,15 +80,15 @@ public class EventManager : MonoBehaviour
     public void SenbonzakuraUtilityDiscard(int cardsToDiscard)
     {
         //Do we need some kind of animation here for the event card cycling?
-        List<SOCardBase> clueCards = new List<SOCardBase>();
+        List<CardData> clueCards = new List<CardData>();
 
         for(int i = 0; i < cardsToDiscard; i++)
         {
-            IEnumerable<SOEventCard> eventCards = DrawEventCard();
+            IEnumerable<CardData> eventCards = DrawEventCard();
 
-            foreach(SOEventCard card in eventCards)
+            foreach(CardData card in eventCards)
                 if (card.EventType != EventCardType.Clue)
-                    GameManager.instance.DeckManager.AddCard(card);
+                    GameManager.instance.DeckManager.AddCardToEventDeck(card);
                 else
                     clueCards.Add(card);
         }
@@ -97,16 +97,16 @@ public class EventManager : MonoBehaviour
         //GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
     }
 
-    public void GrapplingHookUtilityDiscard(SOEventCard eventToDiscard)
+    public void GrapplingHookUtilityDiscard(CardData eventToDiscard)
     {
         RemoveEvent(eventToDiscard);
     }
 
     public void EndTurnCheck(bool nullifyDamage)
     {
-        List<SOEventCard> eventsToRemove = new List<SOEventCard>();
+        List<CardData> eventsToRemove = new List<CardData>();
 
-        foreach (SOEventCard eventCard in currentEventCards)
+        foreach (CardData eventCard in currentEventCards)
         {
             int healthDamage = eventCard.CurrentDangerPoints + eventDangerModifier;
             if (!nullifyDamage)
@@ -115,13 +115,13 @@ public class EventManager : MonoBehaviour
             eventsToRemove.Add(eventCard);
         }
 
-        foreach (SOEventCard eventCard in eventsToRemove)
+        foreach (CardData eventCard in eventsToRemove)
             RemoveEvent(eventCard);
 
         BrokenKatanaReset();
     }
 
-    public void RemoveClue(SOEventCard clueCard)
+    public void RemoveClue(CardData clueCard)
     {
         GameManager.instance.UpdateClueCount(1);
         RemoveEvent(clueCard);
@@ -129,25 +129,25 @@ public class EventManager : MonoBehaviour
 
     private void Start()
     {
-        currentEventCards = new List<SOEventCard>();
+        currentEventCards = new List<CardData>();
         SOUtilityEffect.OnStatsChanged += UpdateEventStats;
         GameManager.OnStartNewTurn += ResetGrapplingCount;
         GameManager.OnStartNewTurn += BrokenKatanaCheck;
     }
 
-    private IEnumerable<SOEventCard> DrawEventCard()
+    private IEnumerable<CardData> DrawEventCard()
     {
         return GameManager.instance.DeckManager.DrawRandomEventCards(1);
     }
 
-    private void RemoveEvent(SOEventCard eventToRemove)
+    private void RemoveEvent(CardData eventToRemove)
     {
         eventToRemove.OnEventEnded();
         Destroy(eventToRemove.CardUIOjbect);
         currentEventCards.Remove(eventToRemove);
     }
 
-    private bool CheckEventIsPlayable(SOEventCard targetEvent, SOUtilityCard targetUtility)
+    private bool CheckEventIsPlayable(CardData targetEvent, CardData targetUtility)
     {
         if (!currentEventCards.Contains(targetEvent))
         {
@@ -181,7 +181,7 @@ public class EventManager : MonoBehaviour
 
     private void UpdateEventStats()
     {
-        foreach(SOEventCard card in currentEventCards)
+        foreach(CardData card in currentEventCards)
         {
             GameManager.instance.PlayFieldUIManager.UpdateEventCardUI(
                 card, card.CurrentDangerPoints + eventDangerModifier, card.CurrentPlayNumber + eventPlayCountModifier);
@@ -195,7 +195,7 @@ public class EventManager : MonoBehaviour
         grapplingHookEventDrawCount = 0;
     }
 
-    private void GrapplingHookCheck(SOEventCard newEvent)
+    private void GrapplingHookCheck(CardData newEvent)
     {
         if(hasGrapplingHook)
         {

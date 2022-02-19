@@ -14,7 +14,7 @@ public class CardBuilder : MonoBehaviour
     [SerializeField] private Transform equipmentPosition;
     [SerializeField] private Transform eventPosition;
 
-    public void GenerateCard(SOUtilityCard newCard, UtilityPosition position)
+    public void GenerateCard(CardData newCard, UtilityPosition position)
     {
         if (position == UtilityPosition.None)
             return;
@@ -33,17 +33,17 @@ public class CardBuilder : MonoBehaviour
         }
 
         newCardUI.gameObject.SetActive(true);
-        newCardUI.GetComponent<CardUI>().InitCardUI(newCard);
+        newCardUI.GetComponent<CardUI>().InitUtilityCardUI(newCard);
         newCard.CardUIOjbect = newCardUI;
     }
 
-    public GameObject GenerateCard(SOEventCard newCard)
+    public GameObject GenerateCard(CardData newCard)
     {
         GameObject newCardUI;
         newCardUI = Instantiate(cardPrefab, eventPosition.transform);
 
         newCardUI.gameObject.SetActive(true);
-        newCardUI.GetComponent<CardUI>().InitCardUI(newCard);
+        newCardUI.GetComponent<CardUI>().InitEventCardUI(newCard);
         newCard.CardUIOjbect = newCardUI;
 
 

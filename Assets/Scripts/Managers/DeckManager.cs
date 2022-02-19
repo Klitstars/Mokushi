@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class DeckManager : MonoBehaviour
 {
-    [SerializeField] private EventDeckObject eventDeck;
-    [SerializeField] private UtilityDeckObject utilityDeck;
+    [SerializeField] private DeckObject eventDeck;
+    [SerializeField] private DeckObject utilityDeck;
 
-    public IEnumerable<SOEventCard> DrawRandomEventCards(int cardsToDraw = 1)
+    public IEnumerable<CardData> DrawRandomEventCards(int cardsToDraw = 1)
     {
-        List<SOEventCard> drawnCards = new List<SOEventCard>();
+        List<CardData> drawnCards = new List<CardData>();
 
         for (int i = 0; i < cardsToDraw; i++)
             drawnCards.Add(DrawRandomEventCard());
@@ -17,7 +17,7 @@ public class DeckManager : MonoBehaviour
         return drawnCards;
     }
 
-    public SOEventCard DrawRandomEventCard()
+    public CardData DrawRandomEventCard()
     {
         if (eventDeck.CardDeck.Count == 0)
         {
@@ -25,16 +25,16 @@ public class DeckManager : MonoBehaviour
             return null;
         }
 
-        SOEventCard drawnCard = eventDeck.CardDeck[0];
+        CardData drawnCard = eventDeck.CardDeck[0];
         //WE NEED TO ADD A DISCARD DECK HERE
         eventDeck.RemoveCard(drawnCard);
 
         return drawnCard;
     }
 
-    public IEnumerable<SOUtilityCard> DrawRandomUtilityCards(int cardsToDraw = 1)
+    public IEnumerable<CardData> DrawRandomUtilityCards(int cardsToDraw = 1)
     {
-        List<SOUtilityCard> drawnCards = new List<SOUtilityCard>();
+        List<CardData> drawnCards = new List<CardData>();
 
         for (int i = 0; i < cardsToDraw; i++)
             drawnCards.Add(DrawRandomUtilityCard());
@@ -42,7 +42,7 @@ public class DeckManager : MonoBehaviour
         return drawnCards;
     }
 
-    public SOUtilityCard DrawRandomUtilityCard()
+    public CardData DrawRandomUtilityCard()
     {
         if (utilityDeck.CardDeck.Count == 0)
         {
@@ -50,7 +50,7 @@ public class DeckManager : MonoBehaviour
             return null;
         }
 
-        SOUtilityCard drawnCard = utilityDeck.CardDeck[0];
+        CardData drawnCard = utilityDeck.CardDeck[0];
         utilityDeck.RemoveCard(drawnCard);
 
         //WE NEED TO ADD DISCARD DECK HANDLING HERE
@@ -61,7 +61,7 @@ public class DeckManager : MonoBehaviour
 
     public void RandomizeCardDecks()
     {
-        List<SOEventCard> newEventDeckOrder = new List<SOEventCard>();
+        List<CardData> newEventDeckOrder = new List<CardData>();
         int deckCount = eventDeck.CardDeck.Count;
 
 
@@ -75,7 +75,7 @@ public class DeckManager : MonoBehaviour
 
         eventDeck.CardDeck = newEventDeckOrder;
 
-        List<SOUtilityCard> newUtilityDeckOrder = new List<SOUtilityCard>();
+        List<CardData> newUtilityDeckOrder = new List<CardData>();
         deckCount = utilityDeck.CardDeck.Count;
 
 
@@ -89,8 +89,8 @@ public class DeckManager : MonoBehaviour
         utilityDeck.CardDeck = newUtilityDeckOrder;
     }
 
-    public void AddCard(SOEventCard cardToAdd) => eventDeck.AddCard(cardToAdd);
-    public void AddCard(SOUtilityCard cardToAdd) => utilityDeck.AddCard(cardToAdd);
+    public void AddCardToEventDeck(CardData cardToAdd) => eventDeck.AddCard(cardToAdd);
+    public void AddCardToUtilityDeck(CardData cardToAdd) => utilityDeck.AddCard(cardToAdd);
 
     private void Start()
     {
