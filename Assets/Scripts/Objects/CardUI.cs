@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,8 +17,7 @@ public class CardUI : MonoBehaviour
     [SerializeField] private TMP_Text playCountText;
     [SerializeField] private TMP_Text playCountPointsText;
     [SerializeField] private Image highlightImage;
-    [SerializeField] private Transform homePoint;
-    [SerializeField] private float lerpSpeed;
+
 
     private CardData utilityCardData;
     private CardData eventCardData;
@@ -85,7 +85,7 @@ public class CardUI : MonoBehaviour
         dangerPointsText.text = dangerPoints.ToString();
         playCountPointsText.text = playCount.ToString();
 
-        if (newCard.EventType == EventCardType.Clue)
+        if (newCard.CardEffects.Select(x => x.effectType).Contains(EffectTypes.Clue))
         {
             dangerText.text = "";
             dangerPointsText.text = "";
@@ -108,7 +108,7 @@ public class CardUI : MonoBehaviour
         dangerPointsText.text = newCard.CurrentDangerPoints.ToString();
         playCountPointsText.text = newCard.CurrentPlayNumber.ToString();
 
-        if (newCard.EventType == EventCardType.Clue)
+        if (newCard.CardEffects.Select(x => x.effectType).Contains(EffectTypes.Clue))
         {
             dangerText.text = "";
             dangerPointsText.text = "";

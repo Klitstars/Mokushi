@@ -14,7 +14,7 @@ public class CardBuilder : MonoBehaviour
     [SerializeField] private Transform equipmentPosition;
     [SerializeField] private Transform eventPosition;
 
-    public void GenerateCard(CardData newCard, UtilityPosition position)
+    public void GenerateUtilityCard(CardData newCard, UtilityPosition position)
     {
         if (position == UtilityPosition.None)
             return;
@@ -28,7 +28,7 @@ public class CardBuilder : MonoBehaviour
 
         if(newCardUI == null)
         {
-            Debug.Log("Oops.");
+            Debug.Log("Oops, no Card UI was found in the Card Builder.");
             return;
         }
 
@@ -37,7 +37,7 @@ public class CardBuilder : MonoBehaviour
         newCard.CardUIOjbect = newCardUI;
     }
 
-    public GameObject GenerateCard(CardData newCard)
+    public GameObject GenerateEventCard(CardData newCard)
     {
         GameObject newCardUI;
         newCardUI = Instantiate(cardPrefab, eventPosition.transform);

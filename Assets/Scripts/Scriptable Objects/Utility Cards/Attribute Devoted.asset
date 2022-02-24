@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
+  m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
   m_Name: Attribute Devoted
   m_EditorClassIdentifier: 
   cardName: 'Attribute: Devoted'
@@ -20,5 +20,9 @@ MonoBehaviour:
   utilityType: 3
   equipmentType: 0
   utilityPoints: 3
-  utilityEffects: []
-  IsMandatory: 0
+  isMandatory: 0
+  maxDangerPoints: 0
+  maxPlayNumber: 0
+  enactAtStart: 0
+  enactAtEnd: 0
+  cardEffects: []

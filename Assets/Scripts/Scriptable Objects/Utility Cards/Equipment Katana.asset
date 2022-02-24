@@ -9,17 +9,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b89dddce6d3254ea4f808bacc91d2a, type: 3}
+  m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
   m_Name: Equipment Katana
   m_EditorClassIdentifier: 
   cardName: 'Equipment: Katana'
-  cardDescription: Reduce Danger Points by 1 for events.
+  cardDescription: 
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
   utilityType: 1
   equipmentType: 3
   utilityPoints: 0
-  utilityEffects:
-  - {fileID: 11400000, guid: 89cb7e337c4432e43986068a0ee49074, type: 2}
-  IsMandatory: 0
+  isMandatory: 0
+  maxDangerPoints: 0
+  maxPlayNumber: 0
+  enactAtStart: 0
+  enactAtEnd: 0
+  cardEffects:
+  - cardEffect: 11
+    effectTarget: 0
+    effectMagnitude: -1
+    effectDuration: 0
+    enactAtStartOfTurn: 0
+    enactAtEndOfTurn: 0

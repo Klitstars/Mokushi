@@ -12,6 +12,8 @@ public class EditorCardGUI : Editor
 
         EditorGUILayout.Space();
 
+        DisplayCardBaseAttributes();
+
         switch (CardTypeProperty.enumValueIndex)
         {
             case (int)CardType.Utility:
@@ -21,39 +23,44 @@ public class EditorCardGUI : Editor
             case (int)CardType.Event:
                 DisplayEventCardAttributes();
                 break;
-
         }
+
         serializedObject.ApplyModifiedProperties();
     }
 
     private void DisplayUtilityCardAttributes()
     {
-        DisplayCardBaseAttributes();
-
         EditorGUILayout.Space();
 
         SerializedProperty UtilityTypeProperty = serializedObject.FindProperty("utilityType");
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("utilityType"));
 
-        if(UtilityTypeProperty.intValue != 0)
+        if (UtilityTypeProperty.intValue == 0)
+            return;
+
+        if (UtilityTypeProperty.intValue == 1)
             EditorGUILayout.PropertyField(serializedObject.FindProperty("equipmentType"));
-        
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("utilityPoints"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("isMandatory"));
+
+        if (UtilityTypeProperty.intValue > 1)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("utilityPoints"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("isMandatory"));
+        }
+
+        SerializedProperty CardEffectProperty = serializedObject.FindProperty("cardEffects");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("cardEffects"));
     }
 
     private void DisplayEventCardAttributes()
     {
-        DisplayCardBaseAttributes();
-
         EditorGUILayout.Space();
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxDangerPoints"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxPlayNumber"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("eventType"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("eventEffect"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("enactAtStart")); 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("enactAtEnd"));
+
+        SerializedProperty CardEffectProperty = serializedObject.FindProperty("cardEffects");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("cardEffects"));
     }
 
     private void DisplayCardBaseAttributes()
@@ -62,5 +69,9 @@ public class EditorCardGUI : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cardDescription"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cardForeground"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("cardBackground"));
+
+        EditorGUILayout.Space();
+
+        serializedObject.ApplyModifiedProperties();
     }
 }

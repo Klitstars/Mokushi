@@ -19,9 +19,8 @@ public class GameManager : MonoBehaviour
 
     private UtilityManager utilityManager;
     private EventManager eventManager;
-    private PlayFieldUIManager playFieldUIManager;
+    private CardUIPlayController cardUIPlayController;
     private DeckManager deckManager;
-    private CardBuilder cardBuilder;
     private CardPlayController cardPlayController;
 
     public bool keepCurrentEvent = false;
@@ -30,9 +29,8 @@ public class GameManager : MonoBehaviour
 
     public UtilityManager UtilityManager { get => utilityManager; }
     public EventManager EventManager { get => eventManager; }
-    public PlayFieldUIManager PlayFieldUIManager { get => playFieldUIManager; }
+    public CardUIPlayController CardUIPlayController { get => cardUIPlayController; }
     public DeckManager DeckManager { get => deckManager; }
-    public CardBuilder CardBuilder { get => cardBuilder; }
     public CardPlayController CardPlayController { get => cardPlayController; }
 
 
@@ -46,16 +44,16 @@ public class GameManager : MonoBehaviour
     {
         currentHealth += amountToModify;
 
-        playFieldUIManager.UpdatePlayerHealth(currentHealth);
+        cardUIPlayController.UpdatePlayerHealth(currentHealth);
     }
 
     public void UpdateClueCount(int amountToModify)
     {
         clueCount += amountToModify;
-        playFieldUIManager.UpdateClueCount(clueCount);
+        cardUIPlayController.UpdateClueCount(clueCount);
 
         if (clueCount >= 4)
-            PlayFieldUIManager.GameOver(true);
+            CardUIPlayController.GameOver(true);
     }
 
     public void CanEndTurn(int endTurn)
@@ -63,10 +61,10 @@ public class GameManager : MonoBehaviour
         canEndTurn += endTurn;
 
         if (canEndTurn < 0)
-            PlayFieldUIManager.CanEndTurn(false);
+            CardUIPlayController.CanEndTurn(false);
         if (canEndTurn >= 0)
         {
-            PlayFieldUIManager.CanEndTurn(true);
+            CardUIPlayController.CanEndTurn(true);
         }
             
     }
@@ -75,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         eventManager.DrawCardAndUpdateEvents();
         utilityManager.DrawCards(7);
-        playFieldUIManager.UpdatePlayerHealth(currentHealth);
+        cardUIPlayController.UpdatePlayerHealth(currentHealth);
 
         OnStartNewTurn += EventManager.DrawCardAndUpdateEvents;
         OnStartNewTurn += UtilityManager.DrawCard;
@@ -115,12 +113,10 @@ public class GameManager : MonoBehaviour
             utilityManager = FindObjectOfType<UtilityManager>();
         if (eventManager == null)
             eventManager = FindObjectOfType<EventManager>();
-        if (playFieldUIManager == null)
-            playFieldUIManager = FindObjectOfType<PlayFieldUIManager>();
+        if (cardUIPlayController == null)
+            cardUIPlayController = FindObjectOfType<CardUIPlayController>();
         if (deckManager == null)
             deckManager = FindObjectOfType<DeckManager>();
-        if (cardBuilder == null)
-            cardBuilder = FindObjectOfType<CardBuilder>();
         if (cardPlayController == null)
             cardPlayController = FindObjectOfType<CardPlayController>();
 
@@ -144,13 +140,13 @@ public class GameManager : MonoBehaviour
 
     private void LoseGame()
     {
-        PlayFieldUIManager.GameOver(false);
+        CardUIPlayController.GameOver(false);
         //Do something here.
     }
 
     private void UpdateTurnCount()
     {
         currentTurnCount++;
-        playFieldUIManager.UpdateTurnCount(currentTurnCount);
+        cardUIPlayController.UpdateTurnCount(currentTurnCount);
     }
 }

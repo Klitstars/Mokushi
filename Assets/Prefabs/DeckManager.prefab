@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4838364890414535628
+--- !u!1 &7433929768725529892
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4838364890414535631}
-  - component: {fileID: 4838364890414535630}
+  - component: {fileID: 7433929768725529894}
+  - component: {fileID: 7433929768725529895}
   m_Layer: 0
   m_Name: DeckManager
   m_TagString: Untagged
@@ -17,61 +17,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4838364890414535631
+--- !u!4 &7433929768725529894
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4838364890414535628}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 7433929768725529892}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4838364890414535630
+--- !u!114 &7433929768725529895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4838364890414535628}
+  m_GameObject: {fileID: 7433929768725529892}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60e44ec2e6f76db4d8baf88339e39c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventDeck:
-    cardDeck:
-    - {fileID: 11400000, guid: abd57acac75926247ba8f0d8a692b974, type: 2}
-    - {fileID: 11400000, guid: 8a8e348667606f741a82604f94a10e0d, type: 2}
-    - {fileID: 11400000, guid: b4c5a397293790a4ab5433a7ce5166dc, type: 2}
-    - {fileID: 11400000, guid: 3615c5ad04b8959419a8b1eaa615094e, type: 2}
-    - {fileID: 11400000, guid: 0fc1f5b0d7eaf0a4cbbf036f4b81c4f0, type: 2}
-    - {fileID: 11400000, guid: ed28ac103d01660498fe0a3796af86e9, type: 2}
-    - {fileID: 11400000, guid: aced513ee23fc724681d6a4576324568, type: 2}
-    - {fileID: 11400000, guid: 92ae9fd7dacf0ae47a5a1a9e878acda5, type: 2}
-    - {fileID: 11400000, guid: 4f94b4717c77a814f94fe3ff1ee07a09, type: 2}
-    - {fileID: 11400000, guid: 2064b727356aa4d469f505320f5f30bc, type: 2}
-    - {fileID: 11400000, guid: 612bd5726dd1f314db302bb05853f6e4, type: 2}
-    - {fileID: 11400000, guid: a15a4ebd48edada47ba450319eaf8058, type: 2}
-    deckType: 1
-  utilityDeck:
-    cardDeck:
-    - {fileID: 11400000, guid: 9c6811d42ab3d7e429203f0e8cb37699, type: 2}
-    - {fileID: 11400000, guid: ba52e565b95049e469a1bfa7a37bdc86, type: 2}
-    - {fileID: 11400000, guid: 603bfd47c92c5164d954f8e82ed006db, type: 2}
-    - {fileID: 11400000, guid: 23af0a9cd86c97d4bbcb7e69430fefde, type: 2}
-    - {fileID: 11400000, guid: fb986b88d2eac1c49810bb50a7b7b009, type: 2}
-    - {fileID: 11400000, guid: 1ed4af15dcb6cd043afe4d8ed714aa82, type: 2}
-    - {fileID: 11400000, guid: 473870dbe8e34d34c87f488cda8c9263, type: 2}
-    - {fileID: 11400000, guid: 70e9086be8c483848bf70caa5e113461, type: 2}
-    - {fileID: 11400000, guid: 9e6aea1ebe045c149b2b7abb6efaf653, type: 2}
-    - {fileID: 11400000, guid: fedda5b12e0bb5a4cb4185927093acc0, type: 2}
-    - {fileID: 11400000, guid: b78bd18e69916a845aa168a9e00158e7, type: 2}
-    - {fileID: 11400000, guid: 78755d4bf09305146a74ae4c7df7eeed, type: 2}
-    - {fileID: 11400000, guid: 5c2877436d41347428778e92af6371ef, type: 2}
-    - {fileID: 11400000, guid: 274cbee0fc4725f42bf15b92ae8d6ab3, type: 2}
-    deckType: 0
+  sOEventDeck:
+  - {fileID: 11400000, guid: 29b74f1826f143741bb7480faaaca3db, type: 2}
+  - {fileID: 11400000, guid: 29b74f1826f143741bb7480faaaca3db, type: 2}
+  sOUtilityDeck:
+  - {fileID: 11400000, guid: 81ef96771f676784f874a80dcfb8de64, type: 2}
+  - {fileID: 11400000, guid: 81ef96771f676784f874a80dcfb8de64, type: 2}
+  - {fileID: 11400000, guid: 81ef96771f676784f874a80dcfb8de64, type: 2}
+  - {fileID: 11400000, guid: 4789d3c320eb8eb4394240b2aef2d82f, type: 2}

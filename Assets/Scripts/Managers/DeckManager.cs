@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DeckManager : MonoBehaviour
 {
-    [SerializeField] private DeckObject eventDeck;
-    [SerializeField] private DeckObject utilityDeck;
+    [SerializeField] private List<SOCardData> sOEventDeck;
+    [SerializeField] private List<SOCardData> sOUtilityDeck;
+    private DeckObject eventDeck;
+    private DeckObject utilityDeck;
 
     public IEnumerable<CardData> DrawRandomEventCards(int cardsToDraw = 1)
     {
@@ -94,6 +96,40 @@ public class DeckManager : MonoBehaviour
 
     private void Start()
     {
+        InitCardDecks();
+        GenerateUtilityCards();
+        GenerateEventCards();
         RandomizeCardDecks();
+    }
+
+    private void GenerateUtilityCards()
+    {
+        CardData newCard;
+
+        foreach (SOCardData soCard in sOUtilityDeck)
+        { 
+            newCard = new CardData(soCard);
+            AddCardToUtilityDeck(newCard);
+        }
+    }
+
+    private void GenerateEventCards()
+    {
+        CardData newCard;
+
+        foreach(SOCardData soCard in sOEventDeck)
+        {
+            newCard = new CardData(soCard);
+            AddCardToEventDeck(newCard);
+        }
+    }
+
+    private void InitCardDecks()
+    {
+        utilityDeck = new DeckObject();
+        utilityDeck.InitDeckList();
+
+        eventDeck = new DeckObject();
+        eventDeck.InitDeckList();
     }
 }
