@@ -16,7 +16,7 @@ public class CardUIPlayController : MonoBehaviour
     [SerializeField] private CardUI equipmentSlot;
     [SerializeField] private CardUI discardEventCard;
 
-    private CardBuilder cardBuilder;
+    private CardUIBuilder cardBuilder;
     private List<CardData> hand;
     private CardData grapplingHookDiscardEvent;
 
@@ -151,6 +151,6 @@ public class CardUIPlayController : MonoBehaviour
     private void Start()
     {
         hand = new List<CardData>();
-        cardBuilder = FindObjectOfType<CardBuilder>();
+        cardBuilder = FindObjectOfType<CardUIBuilder>();
     }
 }

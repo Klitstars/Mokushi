@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CardBuilder : MonoBehaviour
+public class CardUIBuilder : MonoBehaviour
 {
     [Header("Card Prefabs")]
     [SerializeField] private GameObject cardPrefab;
