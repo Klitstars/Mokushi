@@ -36,8 +36,8 @@ public class UtilityManager : MonoBehaviour
 
     public void PlayUtilityCard(CardData newUtility)
     {
-        EffectHandler newEffect;
-
+        if (newUtility == null)
+            Debug.Log("No card sent.");
         if (newUtility.UtilityType == UtilityType.Equipment)
         {
             Equip(newUtility);       
@@ -50,6 +50,7 @@ public class UtilityManager : MonoBehaviour
         GameManager.instance.CardUIPlayController.RemoveUICardFromHand(newUtility);
         GameManager.instance.DeckManager.AddCardToUtilityDeck(newUtility);
     }
+
 
     public void Unequip()
     {
@@ -82,7 +83,5 @@ public class UtilityManager : MonoBehaviour
         currentEquipment = newEquipment;
         GameManager.instance.CardUIPlayController.UpdateEquippedUtility(newEquipment);
         newEquipment.PlayUtilityCard();
-
-        GameManager.instance.CardUIPlayController.RemoveUICardFromHand(newEquipment);
     }
 }

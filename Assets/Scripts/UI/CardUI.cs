@@ -21,8 +21,7 @@ public class CardUI : MonoBehaviour
 
     private CardData utilityCardData;
     private CardData eventCardData;
-    private bool isHighlighted = false;
-
+    private bool isHighlighted = true;
     public bool isPickedUp = false;
 
     public CardData UtilityCardData { get => utilityCardData; }
@@ -137,7 +136,7 @@ public class CardUI : MonoBehaviour
 
     public void SelectEquipment()
     {
-        GameManager.instance.CardPlayController.SelectEquipmentSlot();
+        GameManager.instance.WeaponSelectController.SelectEquipmentCard(utilityCardData);
     }
 
     private void Update()
@@ -147,7 +146,7 @@ public class CardUI : MonoBehaviour
 
     private void Highlight()
     {
-        if (utilityCardData == null)
+        if (utilityCardData == null && eventCardData == null)
             return;
 
         if (isPickedUp && !isHighlighted)
@@ -161,6 +160,9 @@ public class CardUI : MonoBehaviour
             highlightImage.color = new Color(highlightImage.color.r, highlightImage.color.g, highlightImage.color.b, 0);
             isHighlighted = false;
         }
+
+        if (utilityCardData == null)
+            return;
 
         if (utilityCardData.IsMandatory && highlightImage.color != Color.red)
             highlightImage.color = Color.red;

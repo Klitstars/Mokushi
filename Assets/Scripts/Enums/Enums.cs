@@ -46,9 +46,10 @@ public enum Equipment
     GrapplingHook
 }
 
-public enum UtilityPosition
+public enum CardPosition
 {
     None,
     Hand,
+    EquipmentSelect,
     EquipmentSlot
 }

@@ -6,8 +6,12 @@ public class DeckManager : MonoBehaviour
 {
     [SerializeField] private List<SOCardData> sOEventDeck;
     [SerializeField] private List<SOCardData> sOUtilityDeck;
+    [SerializeField] private List<SOCardData> soEquipmentDeck;
     private DeckObject eventDeck;
     private DeckObject utilityDeck;
+    private DeckObject equipmentDeck;
+
+    public List<CardData> EquipmentDeck { get => equipmentDeck.CardDeck; }
 
     public IEnumerable<CardData> DrawRandomEventCards(int cardsToDraw = 1)
     {
@@ -99,8 +103,11 @@ public class DeckManager : MonoBehaviour
         InitCardDecks();
         GenerateUtilityCards();
         GenerateEventCards();
+        GenerateEquipmentCards();
         RandomizeCardDecks();
     }
+
+    private void AddCardToEquipmentDeck(CardData cardToAdd) => equipmentDeck.AddCard(cardToAdd);
 
     private void GenerateUtilityCards()
     {
@@ -124,6 +131,17 @@ public class DeckManager : MonoBehaviour
         }
     }
 
+    private void GenerateEquipmentCards()
+    {
+        CardData newCard;
+        
+        foreach(SOCardData soCard in soEquipmentDeck)
+        {
+            newCard = new CardData(soCard);
+            AddCardToEquipmentDeck(newCard);
+        }
+    }
+
     private void InitCardDecks()
     {
         utilityDeck = new DeckObject();
@@ -131,5 +149,8 @@ public class DeckManager : MonoBehaviour
 
         eventDeck = new DeckObject();
         eventDeck.InitDeckList();
+
+        equipmentDeck = new DeckObject();
+        equipmentDeck.InitDeckList();
     }
 }

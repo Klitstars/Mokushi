@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     private CardUIPlayController cardUIPlayController;
     private DeckManager deckManager;
     private CardPlayController cardPlayController;
+    private CardUIBuilder cardUIBuilder;
+    private WeaponSelectController weaponSelectController;
 
     public bool keepCurrentEvent = false;
     public bool nullifyDamage = true;
@@ -30,8 +32,10 @@ public class GameManager : MonoBehaviour
     public UtilityManager UtilityManager { get => utilityManager; }
     public EventManager EventManager { get => eventManager; }
     public CardUIPlayController CardUIPlayController { get => cardUIPlayController; }
+    public CardUIBuilder CardUIBuilder { get => cardUIBuilder;}
     public DeckManager DeckManager { get => deckManager; }
     public CardPlayController CardPlayController { get => cardPlayController; }
+    public WeaponSelectController WeaponSelectController { get => weaponSelectController; }
 
 
     public delegate void onStartNewTurn();
@@ -42,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerHealth(int amountToModify)
     {
-        currentHealth += amountToModify;
+        currentHealth += (amountToModify + damageModifier);
 
         cardUIPlayController.UpdatePlayerHealth(currentHealth);
     }
@@ -63,9 +67,7 @@ public class GameManager : MonoBehaviour
         if (canEndTurn < 0)
             CardUIPlayController.CanEndTurn(false);
         if (canEndTurn >= 0)
-        {
             CardUIPlayController.CanEndTurn(true);
-        }
             
     }
 
@@ -99,10 +101,11 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this.gameObject);
+        if (instance != null)
+            Destroy(gameObject);
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
         InitGameManager();
     }
@@ -119,6 +122,10 @@ public class GameManager : MonoBehaviour
             deckManager = FindObjectOfType<DeckManager>();
         if (cardPlayController == null)
             cardPlayController = FindObjectOfType<CardPlayController>();
+        if (cardUIBuilder == null)
+            cardUIBuilder = FindObjectOfType<CardUIBuilder>();
+        if (weaponSelectController == null)
+            weaponSelectController = FindObjectOfType<WeaponSelectController>();
 
         if (currentHealth != maxHealth)
             currentHealth = maxHealth;

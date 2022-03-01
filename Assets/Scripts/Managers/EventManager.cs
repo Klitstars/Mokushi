@@ -152,8 +152,6 @@ public class EventManager : MonoBehaviour
         if (eventToRemove == null)
             return;
 
-        Debug.Log("Removing " + eventToRemove.CardName + " event from stack.");
-
         eventToRemove.OnEventEnded();
 
         GameManager.instance.CardUIPlayController.RemoveEventFromStack(eventToRemove);

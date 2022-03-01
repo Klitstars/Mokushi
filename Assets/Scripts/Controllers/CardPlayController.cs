@@ -79,14 +79,14 @@ public class CardPlayController : MonoBehaviour
         {
             equipmentSlotSelected = false;
             GameManager.instance.CardUIPlayController.SelectEquipmentSlot(equipmentSlotSelected);
-            
+
             return;
         }
 
         equipmentSlotSelected = true;
         GameManager.instance.CardUIPlayController.SelectEquipmentSlot(equipmentSlotSelected);
 
-        if(currentEvent != null)
+        if (currentEvent != null)
         {
             currentEvent.CardUIOjbect.GetComponent<CardUI>().isPickedUp = false;
             currentEvent = null;

@@ -149,7 +149,6 @@ public class EffectHandler
 
     private void DrawUtility(int magnitude)
     {
-        Debug.Log("Drawing a card from a card effect.");
         GameManager.instance.UtilityManager.DrawCards(magnitude);
     }
 

@@ -6,17 +6,24 @@ using TMPro;
 
 public class CardUIPlayController : MonoBehaviour
 {
+    [Header("Text Updates")]
     [SerializeField] private TMP_Text playerHealthText;
     [SerializeField] private TMP_Text turnCountText;
     [SerializeField] private TMP_Text clueCountText;
     [SerializeField] private TMP_Text resultsText;
+
+    [Header("Panel Activations")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject grapplingHookPanel;
+    [SerializeField] private GameObject weaponSelectPanel;
+
+    [Header("Button Disables")]
     [SerializeField] private Button endTurnButton;
+
+    [Header("Card UIs")]
     [SerializeField] private CardUI equipmentSlot;
     [SerializeField] private CardUI discardEventCard;
 
-    private CardUIBuilder cardBuilder;
     private List<CardData> hand;
     private CardData grapplingHookDiscardEvent;
 
@@ -59,7 +66,7 @@ public class CardUIPlayController : MonoBehaviour
 
 
         hand.Add(card);
-        cardBuilder.GenerateUtilityCard(card, UtilityPosition.Hand);
+        GameManager.instance.CardUIBuilder.GenerateUtilityCardUI(card, CardPosition.Hand);
     }
 
     public void AddUIEventCard(CardData card)
@@ -67,7 +74,7 @@ public class CardUIPlayController : MonoBehaviour
         if (card == null)
             return;
 
-        cardBuilder.GenerateEventCard(card);
+        GameManager.instance.CardUIBuilder.GenerateEventCardUI(card);
     }
 
     public void RemoveUICardsFromHand(IEnumerable<CardData> cards)
@@ -91,10 +98,9 @@ public class CardUIPlayController : MonoBehaviour
     {
         if (card == null)
             return;
-        Debug.Log("Destroying " + card.CardUIOjbect);
+
         Destroy(card.CardUIOjbect.gameObject);
 
-        Debug.Log("Destroyed " + card.CardUIOjbect);
     }
 
     public void UpdateEquippedUtility(CardData newEquip)
@@ -151,6 +157,5 @@ public class CardUIPlayController : MonoBehaviour
     private void Start()
     {
         hand = new List<CardData>();
-        cardBuilder = FindObjectOfType<CardUIBuilder>();
     }
 }

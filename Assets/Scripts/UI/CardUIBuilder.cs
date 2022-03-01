@@ -8,23 +8,27 @@ public class CardUIBuilder : MonoBehaviour
 {
     [Header("Card Prefabs")]
     [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject weaponCardPrefab;
 
     [Header("Card Positions")]
     [SerializeField] private Transform handPosition;
     [SerializeField] private Transform equipmentPosition;
     [SerializeField] private Transform eventPosition;
+    [SerializeField] private Transform equipmentSelectPosition;
 
-    public void GenerateUtilityCard(CardData newCard, UtilityPosition position)
+    public void GenerateUtilityCardUI(CardData newCard, CardPosition position)
     {
-        if (position == UtilityPosition.None)
+        if (position == CardPosition.None)
             return;
 
         GameObject newCardUI = null;
 
-        if(position == UtilityPosition.Hand)
+        if (position == CardPosition.Hand)
             newCardUI = Instantiate(cardPrefab, handPosition.transform);
-        else if(position == UtilityPosition.EquipmentSlot)
+        else if (position == CardPosition.EquipmentSlot)
             newCardUI = Instantiate(cardPrefab, equipmentPosition.transform);
+        else if (position == CardPosition.EquipmentSelect)
+            newCardUI = Instantiate(weaponCardPrefab, equipmentSelectPosition.transform);
 
         if(newCardUI == null)
         {
@@ -37,7 +41,7 @@ public class CardUIBuilder : MonoBehaviour
         newCard.CardUIOjbect = newCardUI;
     }
 
-    public GameObject GenerateEventCard(CardData newCard)
+    public GameObject GenerateEventCardUI(CardData newCard)
     {
         GameObject newCardUI;
         newCardUI = Instantiate(cardPrefab, eventPosition.transform);

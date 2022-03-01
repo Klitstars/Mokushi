@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewEffectAttribute", menuName = "Effects/NewEffectÁttribute", order = 2)]
 [System.Serializable]
 public class CardEffect 
 {
