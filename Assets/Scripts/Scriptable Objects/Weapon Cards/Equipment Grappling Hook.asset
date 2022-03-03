@@ -12,17 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
   m_Name: Equipment Grappling Hook
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: Grappling Hook
   cardDescription: 
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
-  utilityType: 0
-  equipmentType: 0
+  utilityType: 1
+  equipmentType: 5
   utilityPoints: 0
   isMandatory: 0
   maxDangerPoints: 0
   maxPlayNumber: 0
   enactAtStart: 0
   enactAtEnd: 0
-  cardEffects: []
+  cardEffects:
+  - cardEffect: 4
+    effectTarget: 0
+    effectMagnitude: 0
+    effectDuration: 0
+    effectTiming: 0

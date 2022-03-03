@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
   m_Name: Clue Card
   m_EditorClassIdentifier: 
-  cardName: 
-  cardDescription: 
+  cardName: Clue
+  cardDescription: Blue's gonna be stoked.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
-  cardType: 0
-  utilityType: 0
+  cardType: 1
+  utilityType: 1
   equipmentType: 0
   utilityPoints: 0
   isMandatory: 0
@@ -25,4 +25,9 @@ MonoBehaviour:
   maxPlayNumber: 0
   enactAtStart: 0
   enactAtEnd: 0
-  cardEffects: []
+  cardEffects:
+  - cardEffect: 1
+    effectTarget: 0
+    effectMagnitude: 0
+    effectDuration: 0
+    effectTiming: 0

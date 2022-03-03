@@ -30,5 +30,4 @@ MonoBehaviour:
     effectTarget: 0
     effectMagnitude: -1
     effectDuration: 0
-    enactAtStartOfTurn: 0
-    enactAtEndOfTurn: 0
+    effectTiming: 0

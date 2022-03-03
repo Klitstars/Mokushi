@@ -739,7 +739,7 @@ PrefabInstance:
     - target: {fileID: 7433929768725529895, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
       propertyPath: soEquipmentDeck.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7433929768725529895, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}
@@ -793,7 +793,7 @@ PrefabInstance:
         type: 3}
       propertyPath: soEquipmentDeck.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 4789d3c320eb8eb4394240b2aef2d82f,
+      objectReference: {fileID: 11400000, guid: e7cd54b458f365948bafdf3094b8fc73,
         type: 2}
     - target: {fileID: 7433929768725529895, guid: 37f0fa88cfd9f7e4b8ce23feb868b8b9,
         type: 3}

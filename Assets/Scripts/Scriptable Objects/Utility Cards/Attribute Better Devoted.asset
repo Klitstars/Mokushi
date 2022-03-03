@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attribute Better Devoted
   m_EditorClassIdentifier: 
   cardName: 'Attribute: Better Devoted'
-  cardDescription: 
+  cardDescription: Also draw an event.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
@@ -26,9 +26,8 @@ MonoBehaviour:
   enactAtStart: 0
   enactAtEnd: 0
   cardEffects:
-  - cardEffect: 7
+  - cardEffect: 8
     effectTarget: 0
     effectMagnitude: 1
     effectDuration: 0
-    enactAtStartOfTurn: 0
-    enactAtEndOfTurn: 0
+    effectTiming: 0
