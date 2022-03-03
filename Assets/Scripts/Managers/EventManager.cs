@@ -36,7 +36,7 @@ public class EventManager : MonoBehaviour
         GameManager.instance.CardUIPlayController.AddUIEventCard(newEvent);
 
 
-        if (hasGrapplingHook && newEvent.CardEffects.Select(x => x.effectType).Contains(EffectTypes.Clue)) 
+        if (hasGrapplingHook && !newEvent.CardEffects.Select(x => x.effectType).Contains(EffectTypes.Clue)) 
         {
             grapplingHookEventDrawCount++;
             GrapplingHookCheck(newEvent);
@@ -124,8 +124,6 @@ public class EventManager : MonoBehaviour
 
             eventsToRemove.Add(eventCard);
         }
-
-        Debug.Log(eventsToRemove.Count + " events to remove.");
 
         foreach (CardData eventCard in eventsToRemove)
             RemoveEventFromStack(eventCard);

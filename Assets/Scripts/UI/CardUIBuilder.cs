@@ -25,9 +25,9 @@ public class CardUIBuilder : MonoBehaviour
 
         if (position == CardPosition.Hand)
             newCardUI = Instantiate(cardPrefab, handPosition.transform);
-        else if (position == CardPosition.EquipmentSlot)
+        if (position == CardPosition.EquipmentSlot)
             newCardUI = Instantiate(cardPrefab, equipmentPosition.transform);
-        else if (position == CardPosition.EquipmentSelect)
+        if (position == CardPosition.EquipmentSelect)
             newCardUI = Instantiate(weaponCardPrefab, equipmentSelectPosition.transform);
 
         if(newCardUI == null)

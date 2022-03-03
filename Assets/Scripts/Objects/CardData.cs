@@ -80,7 +80,7 @@ public class CardData
     #endregion
 
     #region Utility Card Functions
-    public void PlayUtilityCard()
+    public void BeginUtilityEffects()
     {
         IterateThroughEffects();
     }
@@ -93,7 +93,11 @@ public class CardData
         EffectHandler newEffectHandler;
         foreach (CardEffect effect in cardEffects)
         {
-            newEffectHandler = new EffectHandler(effect);
+            if(equipmentType == Equipment.None)
+                newEffectHandler = new EffectHandler(effect, false);
+            else
+                newEffectHandler = new EffectHandler(effect, true);
+
             newEffectHandler.HandleEffect();
         }
     }

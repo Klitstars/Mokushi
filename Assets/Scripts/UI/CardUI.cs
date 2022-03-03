@@ -134,10 +134,16 @@ public class CardUI : MonoBehaviour
         }
     }
 
-    public void SelectEquipment()
+    public void EquipmentSelection()
     {
         GameManager.instance.WeaponSelectController.SelectEquipmentCard(utilityCardData);
     }
+
+    public void SelectEquipmentSlot()
+    {
+        GameManager.instance.CardPlayController.UpdateSelectedUtility(utilityCardData);
+    }
+
 
     private void Update()
     {

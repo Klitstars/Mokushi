@@ -9,13 +9,11 @@ public class CardEffect
     [SerializeField] private Equipment effectTarget;
     [SerializeField] private int effectMagnitude;
     [SerializeField] private int effectDuration;
-    [SerializeField] private bool enactAtStartOfTurn;
-    [SerializeField] private bool enactAtEndOfTurn;
+    [SerializeField] private EffectTiming effectTiming;
 
     public EffectTypes effectType { get => cardEffect; }
     public Equipment EffectTarget { get => effectTarget; }
     public int EffectMagnitude { get => effectMagnitude; }
     public int EffectDuration { get => effectDuration; }
-    public bool EnactAtStartOfTurn { get => enactAtStartOfTurn; }
-    public bool EnactAtEndOfTurn { get => enactAtEndOfTurn; }
+    public EffectTiming EffectTiming { get => effectTiming; }
 }

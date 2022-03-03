@@ -46,7 +46,7 @@ public class UtilityManager : MonoBehaviour
             return;
         }
 
-        newUtility.PlayUtilityCard();
+        newUtility.BeginUtilityEffects();
         GameManager.instance.CardUIPlayController.RemoveUICardFromHand(newUtility);
         GameManager.instance.DeckManager.AddCardToUtilityDeck(newUtility);
     }
@@ -56,7 +56,7 @@ public class UtilityManager : MonoBehaviour
     {
         if (currentEquipment != null)
         {
-            GameManager.instance.CardUIPlayController.AddUICardToHand(currentEquipment);
+            Destroy(currentEquipment.CardUIOjbect);
             RemoveEquipment();
         }
     }
@@ -72,7 +72,7 @@ public class UtilityManager : MonoBehaviour
 
     private void RemoveEquipment()
     {
-        OnUnequipItem.Invoke();
+        //OnUnequipItem.Invoke();
         currentEquipment = null;
     }
 
@@ -82,6 +82,6 @@ public class UtilityManager : MonoBehaviour
 
         currentEquipment = newEquipment;
         GameManager.instance.CardUIPlayController.UpdateEquippedUtility(newEquipment);
-        newEquipment.PlayUtilityCard();
+        newEquipment.BeginUtilityEffects();
     }
 }

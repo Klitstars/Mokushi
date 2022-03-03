@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponSelectController : MonoBehaviour
 {
+    [SerializeField] private Button selectWeaponButton;
+    
     private List<CardData> weaponCards;
     private CardData selectedWeapon;
+    
     public void SelectEquipmentCard(CardData selectedCard)
     {
         if (!weaponCards.Contains(selectedCard))
@@ -16,7 +20,8 @@ public class WeaponSelectController : MonoBehaviour
 
     public void EquipSelectedEquipment()
     {
-        GameManager.instance.UtilityManager.PlayUtilityCard(selectedWeapon);
+        if(selectedWeapon != null)
+            GameManager.instance.UtilityManager.PlayUtilityCard(selectedWeapon);
     }
      
     private void Start()

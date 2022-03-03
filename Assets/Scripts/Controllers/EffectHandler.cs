@@ -12,61 +12,78 @@ public class EffectHandler
     public delegate void onStatsChanged();
     public static event onStatsChanged OnStatsChanged;
 
-    public EffectHandler(CardEffect newEffect)
+    public EffectHandler(CardEffect newEffect, bool isEquipment)
     {
         thisEffect = newEffect;
+        this.isEquipment = isEquipment;
     }
 
     public void HandleEffect()
     {
-        DetermineEffect(thisEffect);
-
-        if (thisEffect.EffectDuration == 0)
-        {
-            isEquipment = true;
-            UtilityManager.OnUnequipItem += CancelEffects;
-        }
+        DetermineEffectStartTime();
+        DetermineEffectDuration();
     }
 
-    public void CancelEffects()
+    private void DetermineEffectDuration()
     {
-        DetermineCancelation(thisEffect);
+        if (isEquipment)
+        {
+            UtilityManager.OnUnequipItem += CancelEffects;
+            return;
+        }
+
+        if (thisEffect.EffectDuration >= 1)
+            GameManager.OnStartNewTurn += CancelEffects;
+    }
+
+    private void DetermineEffectStartTime()
+    {
+        if (thisEffect.EffectTiming == EffectTiming.Immediate)
+            DetermineEffect();
+        if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnStart)
+            GameManager.OnStartNewTurn += DetermineEffect;
+        if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnEnd)
+            GameManager.OnEndTurn += DetermineEffect;
+    }
+
+    private void CancelEffects()
+    {
+        DetermineCancelation();
 
         if (isEquipment)
             UtilityManager.OnUnequipItem -= CancelEffects;
     }
 
-    private void DetermineEffect(CardEffect effect)
+    private void DetermineEffect()
     {
-        switch (effect.effectType)
+        switch (thisEffect.effectType)
         {
             case EffectTypes.DrawUtility:
-                DrawUtility(effect.EffectMagnitude);
+                DrawUtility(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.DrawEvent:
-                DrawEvent(effect.EffectMagnitude);
+                DrawEvent(thisEffect.EffectMagnitude);
                 return;
 
-
             case EffectTypes.ReorderEventDeck:
-                ReorderEvents(effect.EffectMagnitude);
+                ReorderEvents(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.ReorderUtilityDeck:
-                ReorderUtility(effect.EffectMagnitude);
+                ReorderUtility(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.DangerPointModifier:
-                DangerPointModifier(effect.EffectMagnitude);
+                DangerPointModifier(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.PlayCountModifier:
-                PlayCountModifier(effect.EffectMagnitude);
+                PlayCountModifier(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.DamageTakenModifier:
-                ModifyDamageTaken(effect.EffectMagnitude);
+                ModifyDamageTaken(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.NullifyEventDamage:
@@ -74,44 +91,53 @@ public class EffectHandler
                 return;
 
             case EffectTypes.CycleEventDraw:
-                CycleEventDraw(true);
+                CycleEventDraw(true, thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.UtilityDrawModifier:
-                UtilityDrawModifier(effect.EffectMagnitude);
+                UtilityDrawModifier(thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.EventDrawModifier:
-                EventDrawModifier(effect.EffectMagnitude);
+                EventDrawModifier(thisEffect.EffectMagnitude);
                 return;
             case EffectTypes.BrokenKatana:
                 BrokenKatana(true);
                 return;
+            case EffectTypes.GrapplingHook:
+                GrapplingHook(true);
+                return;
         }
+
+
+        if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnStart)
+            GameManager.OnStartNewTurn -= DetermineEffect;
+        if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnEnd)
+            GameManager.OnEndTurn -= DetermineEffect;
     }
 
-    private void DetermineCancelation(CardEffect effect)
+    private void DetermineCancelation()
     {
-        switch (effect.effectType)
+        switch (thisEffect.effectType)
         {
             case EffectTypes.ReorderEventDeck:
-                ReorderEvents(-effect.EffectMagnitude);
+                ReorderEvents(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.ReorderUtilityDeck:
-                ReorderUtility(-effect.EffectMagnitude);
+                ReorderUtility(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.DangerPointModifier:
-                DangerPointModifier(-effect.EffectMagnitude);
+                DangerPointModifier(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.PlayCountModifier:
-                PlayCountModifier(-effect.EffectMagnitude);
+                PlayCountModifier(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.DamageTakenModifier:
-                ModifyDamageTaken(-effect.EffectMagnitude);
+                ModifyDamageTaken(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.NullifyEventDamage:
@@ -119,19 +145,22 @@ public class EffectHandler
                 return;
 
             case EffectTypes.CycleEventDraw:
-                CycleEventDraw(false);
+                CycleEventDraw(false, -thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.UtilityDrawModifier:
-                UtilityDrawModifier(-effect.EffectMagnitude);
+                UtilityDrawModifier(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.EventDrawModifier:
-                EventDrawModifier(-effect.EffectMagnitude);
+                EventDrawModifier(-thisEffect.EffectMagnitude);
                 return;
 
             case EffectTypes.BrokenKatana:
                 BrokenKatana(false);
+                return;
+            case EffectTypes.GrapplingHook:
+                GrapplingHook(false);
                 return;
         }
     }
@@ -140,10 +169,14 @@ public class EffectHandler
     {
         currentDurationTimer++;
 
-        if (currentDurationTimer >= thisEffect.EffectDuration)
+        if (currentDurationTimer > thisEffect.EffectDuration)
         {
             CancelEffects();
-            GameManager.OnStartNewTurn -= CancelTimer;
+
+            if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnStart)
+                GameManager.OnStartNewTurn -= DetermineEffect;
+            if (thisEffect.EffectTiming == EffectTiming.EnactAtTurnEnd)
+                GameManager.OnEndTurn -= DetermineEffect;
         }
     }
 
@@ -185,7 +218,7 @@ public class EffectHandler
         GameManager.instance.nullifyDamage = isDamageNullified;
     }
 
-    private void CycleEventDraw(bool hasGrapplingHook)
+    private void CycleEventDraw(bool hasGrapplingHook, int effectMagnitude)
     {
         GameManager.instance.EventManager.hasGrapplingHook = hasGrapplingHook;
     }
@@ -208,5 +241,10 @@ public class EffectHandler
     private void BrokenKatana(bool hasBrokenKatana)
     {
         GameManager.instance.EventManager.hasBrokenKatana = hasBrokenKatana;
+    }
+
+    private void GrapplingHook(bool hasGrapplingHook)
+    {
+        GameManager.instance.EventManager.hasGrapplingHook = hasGrapplingHook;
     }
 }

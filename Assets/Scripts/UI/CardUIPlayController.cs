@@ -21,7 +21,7 @@ public class CardUIPlayController : MonoBehaviour
     [SerializeField] private Button endTurnButton;
 
     [Header("Card UIs")]
-    [SerializeField] private CardUI equipmentSlot;
+    [SerializeField] private GameObject equipmentSlot;
     [SerializeField] private CardUI discardEventCard;
 
     private List<CardData> hand;
@@ -105,12 +105,7 @@ public class CardUIPlayController : MonoBehaviour
 
     public void UpdateEquippedUtility(CardData newEquip)
     {
-        equipmentSlot.UpdateEquipmentUI(newEquip);
-    }
-
-    public void SelectEquipmentSlot(bool isSelected)
-    {
-        equipmentSlot.isPickedUp = isSelected;
+        GameManager.instance.CardUIBuilder.GenerateUtilityCardUI(newEquip, CardPosition.EquipmentSlot);
     }
 
     public void UpdateEventCardUI(CardData card, int dangerPoints, int playCount)
@@ -120,7 +115,8 @@ public class CardUIPlayController : MonoBehaviour
 
     public void NullifyEquipment()
     {
-        equipmentSlot.NullifyUI();
+        Debug.Log("CardUIPlayController attempted to nullify equipment, but this is not implemented yet.");
+        //equipmentSlot.NullifyUI();
     }
 
     public void GameOver(bool win)

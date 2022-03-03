@@ -20,7 +20,7 @@ public enum EffectTypes
     Clue,
     NullifyEventDamage,
     BrokenKatana,
-    CycleEventDraw,
+    GrapplingHook,
     DestroyEquippedItem,
     PayItemToEvent,
 
@@ -34,6 +34,8 @@ public enum EffectTypes
     DamageTakenModifier,
     ReorderUtilityDeck,
     ReorderEventDeck,
+    CycleEventDraw,
+    CycleUtilityDraw
 }
 
 public enum Equipment
@@ -44,6 +46,13 @@ public enum Equipment
     Katana,
     Shurikens,
     GrapplingHook
+}
+
+public enum EffectTiming
+{
+    Immediate,
+    EnactAtTurnStart,
+    EnactAtTurnEnd
 }
 
 public enum CardPosition

@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
 
     public delegate void onStartNewTurn();
     public static event onStartNewTurn OnStartNewTurn;
+    public delegate void onEndTurn();
+    public static event onEndTurn OnEndTurn;
 
     public void UpdateDrawModifier(int amountToModify) => utilityDrawModifier += amountToModify;
     public void UpdateDamageModifier(int amountToModify) => damageModifier += damageModifier;
@@ -89,6 +91,9 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
+        if(OnEndTurn != null)
+            OnEndTurn.Invoke();
+
         if (!keepCurrentEvent)
             if(!SurvivedEvent())
             {
@@ -96,7 +101,8 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-        OnStartNewTurn.Invoke();
+        if(OnStartNewTurn != null)
+            OnStartNewTurn.Invoke();
     }
 
     private void Awake()
@@ -136,19 +142,13 @@ public class GameManager : MonoBehaviour
         eventManager.EndTurnCheck(nullifyDamage);
 
         if (currentHealth <= 0)
-        {
-            Debug.Log("Did not survive the event");
             return false;
-        }
-
-        Debug.Log("Survived the event");
         return true;
     }
 
     private void LoseGame()
     {
         CardUIPlayController.GameOver(false);
-        //Do something here.
     }
 
     private void UpdateTurnCount()
