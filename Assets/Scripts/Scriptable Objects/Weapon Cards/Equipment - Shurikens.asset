@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
-  m_Name: Equipment Grappling Hook
+  m_Name: Equipment - Shurikens
   m_EditorClassIdentifier: 
-  cardName: Grappling Hook
+  cardName: 'Equipment: Shurikens'
   cardDescription: 
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
   utilityType: 1
-  equipmentType: 5
+  equipmentType: 4
   utilityPoints: 0
   isMandatory: 0
   maxDangerPoints: 0
@@ -26,8 +26,8 @@ MonoBehaviour:
   enactAtStart: 0
   enactAtEnd: 0
   cardEffects:
-  - cardEffect: 4
+  - cardEffect: 12
     effectTarget: 0
-    effectMagnitude: 0
+    effectMagnitude: 1
     effectDuration: 0
     effectTiming: 0

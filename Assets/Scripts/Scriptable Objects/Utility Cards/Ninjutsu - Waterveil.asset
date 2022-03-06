@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
-  m_Name: Equipment Katana
+  m_Name: Ninjutsu - Waterveil
   m_EditorClassIdentifier: 
-  cardName: 'Equipment: Katana'
-  cardDescription: 
+  cardName: 'Ninjutsu: Waterveil'
+  cardDescription: Draw 2 cards.
   cardForeground: {fileID: 0}
   cardBackground: {fileID: 0}
   cardType: 0
-  utilityType: 1
-  equipmentType: 3
+  utilityType: 2
+  equipmentType: 0
   utilityPoints: 0
   isMandatory: 0
   maxDangerPoints: 0
@@ -26,8 +26,8 @@ MonoBehaviour:
   enactAtStart: 0
   enactAtEnd: 0
   cardEffects:
-  - cardEffect: 11
+  - cardEffect: 7
     effectTarget: 0
-    effectMagnitude: -1
+    effectMagnitude: 2
     effectDuration: 0
     effectTiming: 0
