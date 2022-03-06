@@ -7,7 +7,7 @@ using TMPro;
 public class CardUIPlayController : MonoBehaviour
 {
     [Header("Text Updates")]
-    [SerializeField] private TMP_Text playerHealthText;
+    [SerializeField] private TMP_Text playerHealthPointsText;
     [SerializeField] private TMP_Text turnCountText;
     [SerializeField] private TMP_Text clueCountText;
     [SerializeField] private TMP_Text resultsText;
@@ -29,7 +29,7 @@ public class CardUIPlayController : MonoBehaviour
 
     public void UpdatePlayerHealth(int currentHealth)
     {
-        playerHealthText.text = currentHealth.ToString();
+        playerHealthPointsText.text = currentHealth.ToString();
     }
 
     public void UpdateTurnCount(int currentTurn)
