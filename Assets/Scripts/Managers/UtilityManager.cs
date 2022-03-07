@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class UtilityManager : MonoBehaviour
 {
-    [SerializeField] private SOUtilityCard currentEquipment;
+    [SerializeField] private CardData currentEquipment;
 
-    public delegate void onEquipItem();
-    public static event onEquipItem OnEquipItem;
     public delegate void onUnequipItem();
-    public static event onEquipItem OnUnequipItem;
+    public static event onUnequipItem OnUnequipItem;
 
-    public SOUtilityCard CurrentEquipment { get => currentEquipment; }
+    public CardData CurrentEquipment { get => currentEquipment; }
 
     public void DrawCard()
     {
-        SOUtilityCard newCard = GameManager.instance.DeckManager.DrawRandomUtilityCard();
+        CardData newCard = GameManager.instance.DeckManager.DrawRandomUtilityCard();
 
         if (newCard == null)
             return;
@@ -23,11 +21,11 @@ public class UtilityManager : MonoBehaviour
         if(newCard.IsMandatory)
         {
             GameManager.instance.CanEndTurn(-1);
-            if (GameManager.instance.EventManager.CurrentEventCards.Count == 0)
-                GameManager.instance.EventManager.DrawCardAndUpdateEvents();
+            //if (GameManager.instance.EventManager.CurrentEventCards.Count == 0)
+            //    GameManager.instance.EventManager.DrawCardAndUpdateEvents();
         }
 
-        GameManager.instance.PlayFieldUIManager.AddCardToHand(newCard);
+        GameManager.instance.CardUIPlayController.AddUICardToHand(newCard);
     }
 
     public void DrawCards(int cardsToDraw = 1)
@@ -36,25 +34,29 @@ public class UtilityManager : MonoBehaviour
             DrawCard();
     }
 
-    public void PlayUtilityCard(SOUtilityCard newUtility)
+    public void PlayUtilityCard(CardData newUtility)
     {
+        if (newUtility == null)
+            Debug.Log("No card sent.");
         if (newUtility.UtilityType == UtilityType.Equipment)
         {
-            Equip(newUtility);
+            Equip(newUtility);       
+
             //NEED UI HERE TO SHOW ACTIVE GAME OBJECT
             return;
         }
 
-        newUtility.PlayUtilityCard();
-        GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(newUtility);
-        GameManager.instance.DeckManager.AddCard(newUtility);
+        newUtility.BeginUtilityEffects();
+        GameManager.instance.CardUIPlayController.RemoveUICardFromHand(newUtility);
+        GameManager.instance.DeckManager.AddCardToUtilityDeck(newUtility);
     }
+
 
     public void Unequip()
     {
         if (currentEquipment != null)
         {
-            GameManager.instance.PlayFieldUIManager.AddCardToHand(currentEquipment);
+            Destroy(currentEquipment.CardUIOjbect);
             RemoveEquipment();
         }
     }
@@ -64,25 +66,22 @@ public class UtilityManager : MonoBehaviour
         if (currentEquipment == null)
             return;
 
-        GameManager.instance.PlayFieldUIManager.NullifyEquipment();
+        GameManager.instance.CardUIPlayController.NullifyEquipment();
         RemoveEquipment();
     }
 
     private void RemoveEquipment()
     {
-        OnUnequipItem.Invoke();
+        //OnUnequipItem.Invoke();
         currentEquipment = null;
     }
 
-    private void Equip(SOUtilityCard newEquipment)
+    private void Equip(CardData newEquipment)
     {
         Unequip();
 
         currentEquipment = newEquipment;
-        GameManager.instance.PlayFieldUIManager.UpdateEquippedUtility(newEquipment);
-        newEquipment.PlayUtilityCard();
-
-        OnEquipItem.Invoke();
-        GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(newEquipment);
+        GameManager.instance.CardUIPlayController.UpdateEquippedUtility(newEquipment);
+        newEquipment.BeginUtilityEffects();
     }
 }

@@ -3,6 +3,8 @@
     Utility,
     Event
 }
+
+
 public enum UtilityType
 {
     None,
@@ -11,30 +13,29 @@ public enum UtilityType
     Attribute
 }
 
-public enum UtilityEffectTypes
+public enum EffectTypes
 {
+    //Non-scaling effects
+    None,
+    Clue,
+    NullifyEventDamage,
+    BrokenKatana,
+    GrapplingHook,
+    DestroyEquippedItem,
+    PayItemToEvent,
+
+    //Scaling effects
     DrawUtility,
     DrawEvent,
     UtilityDrawModifier,
     EventDrawModifier,
-    ReorderUtilityDeck,
-    ReorderEventDeck,
     DangerPointModifier,
     PlayCountModifier,
-    NullifyEventDamage,
     DamageTakenModifier,
-    MandatoryPlay,
+    ReorderUtilityDeck,
+    ReorderEventDeck,
     CycleEventDraw,
-    BrokenKatana
-}
-
-public enum EventEffectTypes
-{
-    None,
-    Clue,
-    DestroyEquippedItem,
-    PayItemToEvent,
-    DamageTakenModifier,
+    CycleUtilityDraw
 }
 
 public enum Equipment
@@ -47,16 +48,17 @@ public enum Equipment
     GrapplingHook
 }
 
-public enum EventCardType
+public enum EffectTiming
 {
-    None,
-    Event,
-    Clue
+    Immediate,
+    EnactAtTurnStart,
+    EnactAtTurnEnd
 }
 
-public enum UtilityPosition
+public enum CardPosition
 {
     None,
     Hand,
+    EquipmentSelect,
     EquipmentSlot
 }

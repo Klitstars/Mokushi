@@ -19,10 +19,11 @@ public class GameManager : MonoBehaviour
 
     private UtilityManager utilityManager;
     private EventManager eventManager;
-    private PlayFieldUIManager playFieldUIManager;
+    private CardUIPlayController cardUIPlayController;
     private DeckManager deckManager;
-    private CardBuilder cardBuilder;
     private CardPlayController cardPlayController;
+    private CardUIBuilder cardUIBuilder;
+    private WeaponSelectController weaponSelectController;
 
     public bool keepCurrentEvent = false;
     public bool nullifyDamage = true;
@@ -30,32 +31,35 @@ public class GameManager : MonoBehaviour
 
     public UtilityManager UtilityManager { get => utilityManager; }
     public EventManager EventManager { get => eventManager; }
-    public PlayFieldUIManager PlayFieldUIManager { get => playFieldUIManager; }
+    public CardUIPlayController CardUIPlayController { get => cardUIPlayController; }
+    public CardUIBuilder CardUIBuilder { get => cardUIBuilder;}
     public DeckManager DeckManager { get => deckManager; }
-    public CardBuilder CardBuilder { get => cardBuilder; }
     public CardPlayController CardPlayController { get => cardPlayController; }
+    public WeaponSelectController WeaponSelectController { get => weaponSelectController; }
 
 
     public delegate void onStartNewTurn();
     public static event onStartNewTurn OnStartNewTurn;
+    public delegate void onEndTurn();
+    public static event onEndTurn OnEndTurn;
 
     public void UpdateDrawModifier(int amountToModify) => utilityDrawModifier += amountToModify;
     public void UpdateDamageModifier(int amountToModify) => damageModifier += damageModifier;
 
     public void UpdatePlayerHealth(int amountToModify)
     {
-        currentHealth += amountToModify;
+        currentHealth += (amountToModify + damageModifier);
 
-        playFieldUIManager.UpdatePlayerHealth(currentHealth);
+        cardUIPlayController.UpdatePlayerHealth(currentHealth);
     }
 
     public void UpdateClueCount(int amountToModify)
     {
         clueCount += amountToModify;
-        playFieldUIManager.UpdateClueCount(clueCount);
+        cardUIPlayController.UpdateClueCount(clueCount);
 
         if (clueCount >= 4)
-            PlayFieldUIManager.GameOver(true);
+            CardUIPlayController.GameOver(true);
     }
 
     public void CanEndTurn(int endTurn)
@@ -63,11 +67,9 @@ public class GameManager : MonoBehaviour
         canEndTurn += endTurn;
 
         if (canEndTurn < 0)
-            PlayFieldUIManager.CanEndTurn(false);
+            CardUIPlayController.CanEndTurn(false);
         if (canEndTurn >= 0)
-        {
-            PlayFieldUIManager.CanEndTurn(true);
-        }
+            CardUIPlayController.CanEndTurn(true);
             
     }
 
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         eventManager.DrawCardAndUpdateEvents();
         utilityManager.DrawCards(7);
-        playFieldUIManager.UpdatePlayerHealth(currentHealth);
+        cardUIPlayController.UpdatePlayerHealth(currentHealth);
 
         OnStartNewTurn += EventManager.DrawCardAndUpdateEvents;
         OnStartNewTurn += UtilityManager.DrawCard;
@@ -89,6 +91,9 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
+        if(OnEndTurn != null)
+            OnEndTurn.Invoke();
+
         if (!keepCurrentEvent)
             if(!SurvivedEvent())
             {
@@ -96,15 +101,17 @@ public class GameManager : MonoBehaviour
                 return;
             }
 
-        OnStartNewTurn.Invoke();
+        if(OnStartNewTurn != null)
+            OnStartNewTurn.Invoke();
     }
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this.gameObject);
+        if (instance != null)
+            Destroy(gameObject);
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
         InitGameManager();
     }
@@ -115,14 +122,16 @@ public class GameManager : MonoBehaviour
             utilityManager = FindObjectOfType<UtilityManager>();
         if (eventManager == null)
             eventManager = FindObjectOfType<EventManager>();
-        if (playFieldUIManager == null)
-            playFieldUIManager = FindObjectOfType<PlayFieldUIManager>();
+        if (cardUIPlayController == null)
+            cardUIPlayController = FindObjectOfType<CardUIPlayController>();
         if (deckManager == null)
             deckManager = FindObjectOfType<DeckManager>();
-        if (cardBuilder == null)
-            cardBuilder = FindObjectOfType<CardBuilder>();
         if (cardPlayController == null)
             cardPlayController = FindObjectOfType<CardPlayController>();
+        if (cardUIBuilder == null)
+            cardUIBuilder = FindObjectOfType<CardUIBuilder>();
+        if (weaponSelectController == null)
+            weaponSelectController = FindObjectOfType<WeaponSelectController>();
 
         if (currentHealth != maxHealth)
             currentHealth = maxHealth;
@@ -133,24 +142,18 @@ public class GameManager : MonoBehaviour
         eventManager.EndTurnCheck(nullifyDamage);
 
         if (currentHealth <= 0)
-        {
-            Debug.Log("Did not survive the event");
             return false;
-        }
-
-        Debug.Log("Survived the event");
         return true;
     }
 
     private void LoseGame()
     {
-        PlayFieldUIManager.GameOver(false);
-        //Do something here.
+        CardUIPlayController.GameOver(false);
     }
 
     private void UpdateTurnCount()
     {
         currentTurnCount++;
-        playFieldUIManager.UpdateTurnCount(currentTurnCount);
+        cardUIPlayController.UpdateTurnCount(currentTurnCount);
     }
 }

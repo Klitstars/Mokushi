@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    [SerializeField] private List<SOEventCard> currentEventCards;
+    [SerializeField] private List<CardData> currentEventCards;
     [SerializeField] private int eventDangerModifier = 0;
     [SerializeField] private int eventPlayCountModifier = 0;
 
@@ -14,7 +15,7 @@ public class EventManager : MonoBehaviour
     public bool hasBrokenKatana = false;
     private bool hasBrokenKatanaBuff = false;
 
-    public List<SOEventCard> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
+    public List<CardData> CurrentEventCards { get => currentEventCards; set => currentEventCards = value; }
     public void UpdateEventDangerModifier(int changeToModifier) => eventDangerModifier += changeToModifier;
     public void UpdateEventPlayCountModifier(int changeToModifier) => eventPlayCountModifier += changeToModifier;
     
@@ -26,46 +27,37 @@ public class EventManager : MonoBehaviour
 
     public void DrawCardAndUpdateEvents()
     {
-        SOEventCard newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
+        CardData newEvent = GameManager.instance.DeckManager.DrawRandomEventCard();
 
         if (newEvent == null)
             return;
 
-        GameManager.instance.CardBuilder.GenerateCard(newEvent);
         currentEventCards.Add(newEvent);
-        newEvent.OnEventStarted();
+        GameManager.instance.CardUIPlayController.AddUIEventCard(newEvent);
 
-        UpdateEventStats();
 
-        if (hasGrapplingHook && newEvent.EventType != EventCardType.Clue)
+        if (hasGrapplingHook && !newEvent.CardEffects.Select(x => x.effectType).Contains(EffectTypes.Clue)) 
         {
             grapplingHookEventDrawCount++;
             GrapplingHookCheck(newEvent);
         }
+
+        newEvent.OnEventStarted();
+        UpdateEventStats();
         //Need UI Update here.
     }
 
-    public bool PlayUtilityOnEvent(SOUtilityCard utility, SOEventCard targetEvent)
+    public bool CheckPlayUtilityOnEvent(CardData utility, CardData targetEvent)
     {
         if (!CheckEventIsPlayable(targetEvent, utility))
             return false;
-
-        //Need UI Update here.
-
-        if(targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && utility.EquipmentType != Equipment.None)
-        {
-            GameManager.instance.PlayFieldUIManager.RemoveCardFromHand(utility);
-            RemoveEvent(targetEvent);
-            
-            return true;
-        }
 
         else
         {
             targetEvent.UpdateDangerPoints(utility.UtilityPoints);
 
             if (targetEvent.CurrentDangerPoints + eventDangerModifier <= 0)
-                RemoveEvent(targetEvent);
+                RemoveEventFromStack(targetEvent);
 
             targetEvent.UpdatePlayCount(1);
             UpdateEventStats();
@@ -76,36 +68,55 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public void SenbonzakuraUtilityDiscard(int cardsToDiscard)
+    public bool CheckPlayEquipmentOnEvent(CardData equipment, CardData targetEvent)
     {
-        //Do we need some kind of animation here for the event card cycling?
-        List<SOCardBase> clueCards = new List<SOCardBase>();
+        if (!CheckEventIsPlayable(targetEvent, equipment))
+            return false;
 
-        for(int i = 0; i < cardsToDiscard; i++)
-        {
-            IEnumerable<SOEventCard> eventCards = DrawEventCard();
+        if (equipment.CardType != CardType.Utility || equipment.UtilityType != UtilityType.Equipment)
+            return false;
 
-            foreach(SOEventCard card in eventCards)
-                if (card.EventType != EventCardType.Clue)
-                    GameManager.instance.DeckManager.AddCard(card);
-                else
-                    clueCards.Add(card);
-        }
+        foreach (CardEffect effect in targetEvent.CardEffects)
+            if (effect.effectType == EffectTypes.PayItemToEvent && effect.EffectTarget == equipment.EquipmentType)
+                return true;
 
-        //Clue Cards go somewhere else
-        //GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
+        foreach (CardEffect effect in targetEvent.CardEffects)
+            if (effect.effectType == EffectTypes.PayItemToEvent && effect.EffectTarget == Equipment.Any)
+                return true;
+
+        return false;
     }
 
-    public void GrapplingHookUtilityDiscard(SOEventCard eventToDiscard)
+    //public void SenbonzakuraUtilityDiscard(int cardsToDiscard)
+    //{
+    //    //Do we need some kind of animation here for the event card cycling?
+    //    List<CardData> clueCards = new List<CardData>();
+
+    //    for(int i = 0; i < cardsToDiscard; i++)
+    //    {
+    //        IEnumerable<CardData> eventCards = DrawEventCard();
+
+    //        foreach (CardData card in eventCards)
+    //            if (card.CardEffect != EffectTypes.Clue)
+    //                GameManager.instance.DeckManager.AddCardToEventDeck(card);
+    //            else
+    //                clueCards.Add(card);
+    //    }
+
+    //    //Clue Cards go somewhere else
+    //    GameManager.instance.HandManagerInstance.AddCardToHand(clueCards);
+    //}
+
+    public void GrapplingHookUtilityDiscard(CardData eventToDiscard)
     {
-        RemoveEvent(eventToDiscard);
+        RemoveEventFromStack(eventToDiscard);
     }
 
     public void EndTurnCheck(bool nullifyDamage)
     {
-        List<SOEventCard> eventsToRemove = new List<SOEventCard>();
+        List<CardData> eventsToRemove = new List<CardData>();
 
-        foreach (SOEventCard eventCard in currentEventCards)
+        foreach (CardData eventCard in currentEventCards)
         {
             int healthDamage = eventCard.CurrentDangerPoints + eventDangerModifier;
             if (!nullifyDamage)
@@ -114,39 +125,38 @@ public class EventManager : MonoBehaviour
             eventsToRemove.Add(eventCard);
         }
 
-        foreach (SOEventCard eventCard in eventsToRemove)
-            RemoveEvent(eventCard);
+        foreach (CardData eventCard in eventsToRemove)
+            RemoveEventFromStack(eventCard);
 
         BrokenKatanaReset();
     }
 
-    public void RemoveClue(SOEventCard clueCard)
+    public void RemoveClue(CardData clueCard)
     {
         GameManager.instance.UpdateClueCount(1);
-        RemoveEvent(clueCard);
+        RemoveEventFromStack(clueCard);
     }
 
     private void Start()
     {
-        currentEventCards = new List<SOEventCard>();
-        SOUtilityEffect.OnStatsChanged += UpdateEventStats;
+        currentEventCards = new List<CardData>();
+        EffectHandler.OnStatsChanged += UpdateEventStats;
         GameManager.OnStartNewTurn += ResetGrapplingCount;
         GameManager.OnStartNewTurn += BrokenKatanaCheck;
     }
 
-    private IEnumerable<SOEventCard> DrawEventCard()
+    public void RemoveEventFromStack(CardData eventToRemove)
     {
-        return GameManager.instance.DeckManager.DrawRandomEventCards(1);
-    }
+        if (eventToRemove == null)
+            return;
 
-    private void RemoveEvent(SOEventCard eventToRemove)
-    {
         eventToRemove.OnEventEnded();
-        Destroy(eventToRemove.CardUIOjbect);
+
+        GameManager.instance.CardUIPlayController.RemoveEventFromStack(eventToRemove);
         currentEventCards.Remove(eventToRemove);
     }
 
-    private bool CheckEventIsPlayable(SOEventCard targetEvent, SOUtilityCard targetUtility)
+    private bool CheckEventIsPlayable(CardData targetEvent, CardData targetUtility)
     {
         if (!currentEventCards.Contains(targetEvent))
         {
@@ -164,13 +174,7 @@ public class EventManager : MonoBehaviour
             return false;
         }
         
-        if (targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && targetUtility.UtilityType == UtilityType.Equipment &&
-            targetEvent.EventEffect.EffectTarget == targetUtility.EquipmentType)
-            return true;
-
-        if (targetEvent.EventEffect.EffectType == EventEffectTypes.PayItemToEvent && targetUtility.UtilityType == UtilityType.Equipment &&
-            targetEvent.EventEffect.EffectTarget == Equipment.Any)
-            return true;
+        
 
         if (targetUtility.UtilityType == UtilityType.Equipment)
             return false;
@@ -180,9 +184,9 @@ public class EventManager : MonoBehaviour
 
     private void UpdateEventStats()
     {
-        foreach(SOEventCard card in currentEventCards)
+        foreach(CardData card in currentEventCards)
         {
-            GameManager.instance.PlayFieldUIManager.UpdateEventCardUI(
+            GameManager.instance.CardUIPlayController.UpdateEventCardUI(
                 card, card.CurrentDangerPoints + eventDangerModifier, card.CurrentPlayNumber + eventPlayCountModifier);
         }            
     }
@@ -192,12 +196,12 @@ public class EventManager : MonoBehaviour
         grapplingHookEventDrawCount = 0;
     }
 
-    private void GrapplingHookCheck(SOEventCard newEvent)
+    private void GrapplingHookCheck(CardData newEvent)
     {
         if(hasGrapplingHook)
         {
             if (grapplingHookEventDrawCount == 2)
-                GameManager.instance.PlayFieldUIManager.GrapplingHookEventCheck(
+                GameManager.instance.CardUIPlayController.GrapplingHookEventCheck(
                     newEvent, newEvent.CurrentDangerPoints + eventDangerModifier, newEvent.CurrentPlayNumber + eventPlayCountModifier);
         }        
     }

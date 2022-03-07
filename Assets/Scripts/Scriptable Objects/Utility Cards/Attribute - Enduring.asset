@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2ab5ccc3d1732c47ba333694a2f93bd, type: 3}
+  m_Name: Attribute - Enduring
+  m_EditorClassIdentifier: 
+  cardName: 'Attribute: Enduring'
+  cardDescription: +2 Utility points, reduce damage taken by 1 this turn.
+  cardForeground: {fileID: 0}
+  cardBackground: {fileID: 0}
+  cardType: 0
+  utilityType: 3
+  equipmentType: 0
+  utilityPoints: 2
+  isMandatory: 0
+  maxDangerPoints: 0
+  maxPlayNumber: 0
+  enactAtStart: 0
+  enactAtEnd: 0
+  cardEffects:
+  - cardEffect: 13
+    effectTarget: 0
+    effectMagnitude: -1
+    effectDuration: 0
+    effectTiming: 0
