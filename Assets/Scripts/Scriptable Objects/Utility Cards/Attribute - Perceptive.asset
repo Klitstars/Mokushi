@@ -27,7 +27,7 @@ MonoBehaviour:
   enactAtStart: 0
   enactAtEnd: 0
   cardEffects:
-  - cardEffect: 15
+  - cardEffect: 16
     effectTarget: 0
     effectMagnitude: 3
     effectDuration: 0
